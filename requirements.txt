@@ -1,4 +1,7 @@
 python-dotenv
 requests
 numpy 
-pandas 
+pandas
+#need to install:
+psycopg2
+flask
