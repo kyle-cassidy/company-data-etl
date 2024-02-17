@@ -1,3 +1,5 @@
+
+# FIXME refactor into the income statement, balance sheet, and cash flow statement
 class Financial:
     __table__ = 'financials'
     columns = ['financial_id', 'company_id', 'period', 'revenue', 'net_income', 'eps', 'total_debt', 'total_equity', 'reported_currency']

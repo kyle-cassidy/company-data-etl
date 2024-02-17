@@ -23,7 +23,9 @@ CREATE TABLE HistoricalCompanies (
     isEtf BOOLEAN,
     isActivelyTrading BOOLEAN,
     effective_date TIMESTAMP NOT NULL,
-    operation_type VARCHAR(10) NOT NULL CHECK (operation_type IN ('INSERT', 'UPDATE', 'DELETE'))
+    operation_type VARCHAR(10) NOT NULL CHECK (operation_type IN ('INSERT', 'UPDATE', 'DELETE')),
+    reason TEXT, -- Reason for the operation
+    snapshot JSONB -- Snapshot of the data before the operation
 );
 ```
 
