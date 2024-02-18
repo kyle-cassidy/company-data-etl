@@ -51,3 +51,80 @@ class FMPClient:
     
     
     
+    def request_company_profile(self, ticker):
+        """
+        Get company profile data.
+        :param ticker: Stock ticker symbol.
+        :return: JSON response containing company profile data.
+        """
+        endpoint = f"profile/{ticker}"
+        return self.make_request(endpoint)
+
+    def request_stock_list(self):
+        """
+        Get a list of all companies including the exchange they are traded on.
+        :return: JSON response containing the stock list.
+        """
+        endpoint = "stock/list"
+        return self.make_request(endpoint)
+
+    def request_all_countries(self):
+        """
+        Get a list of all countries where stocks are traded.
+        :return: JSON response containing the list of all countries.
+        """
+        endpoint = "get-all-countries"
+        return self.make_request(endpoint)
+
+    def request_stock_screener(self, sector, industry):
+        """
+        Filter companies by sector and industry.
+        :param sector: Sector to filter by.
+        :param industry: Industry to filter by.
+        :return: JSON response containing the filtered company list.
+        """
+        endpoint = f"stock-screener?sector={sector}&industry={industry}"
+        return self.make_request(endpoint)
+
+    def request_financial_statements(self, ticker, statement_type):
+        """
+        Get financial statements (income statement, balance sheet, cash flow).
+        :param ticker: Stock ticker symbol.
+        :param statement_type: Type of financial statement ('income', 'balance_sheet', 'cash_flow').
+        :return: JSON response containing the financial statements.
+        """
+        endpoint_map = {
+            'income': "income-statement",
+            'balance_sheet': "balance-sheet-statement",
+            'cash_flow': "cash-flow-statement"
+        }
+        endpoint = f"{endpoint_map[statement_type]}/{ticker}"
+        return self.make_request(endpoint)
+
+    def request_historical_price_full(self, ticker):
+        """
+        Get historical stock prices.
+        :param ticker: Stock ticker symbol.
+        :return: JSON response containing historical stock prices.
+        """
+        endpoint = f"historical-price-full/{ticker}"
+        return self.make_request(endpoint)
+
+    def request_institutional_stock_ownership(self, ticker):
+        """
+        Get the institutional ownership of individual stocks.
+        :param ticker: Stock ticker symbol.
+        :return: JSON response containing institutional ownership data.
+        """
+        endpoint = f"institutional-ownership/symbol-ownership?symbol={ticker}"
+        return self.make_request(endpoint)
+
+    def request_analyst_stock_recommendations(self, ticker):
+        """
+        Get analyst stock recommendations.
+        :param ticker: Stock ticker symbol.
+        :return: JSON response containing analyst stock recommendations.
+        """
+        endpoint = f"analyst-stock-recommendations/{ticker}"
+        return self.make_request(endpoint)
+
