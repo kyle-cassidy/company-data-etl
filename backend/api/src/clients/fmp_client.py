@@ -3,13 +3,13 @@ from requests.exceptions import HTTPError
 from secrets.settings import FMP_API_KEY
 
 class FMPClient:
-    
+
     def __init__(self,API_KEY=FMP_API_KEY):
         self.API_KEY = API_KEY
         self.base_URL = 'https://financialmodelingprep.com/api/v3/'       
-        self.sector_peers_endpoint = 'stock-screener'
-    
-    
+
+
+
     def make_request(self, endpoint: str, params=None)-> dict:
         """
         Makes a generic GET request to the specified endpoint.
@@ -20,37 +20,17 @@ class FMPClient:
         
         if params is None:                              # If no params are passed, 
             params = {}                                 # initialize an empty dictionary
-        params['apikey'] = self.API_KEY                # Include the API key in every request. add to params dict.
+        params['apikey'] = self.API_KEY                 # Include the API key in every request. add to params dict.
         URL = f'{self.base_URL}/{endpoint}'             # Construct the URL 
         response = requests.get(URL, params=params)     # Make the request
-        params.pop('apikey', None)                     # Remove API key from params after request to avoid leaking it.
+        params.pop('apikey', None)                      # Remove API key from params after request to avoid leaking it.
         
         if response.status_code != 200:
             raise HTTPError(f'API request failed with status code {response.status_code}: {response.text}')
 
         return response.json()
 
-    
-    def request_sector_peers(self, sector='Technology', exchange='NASDAQ', market_cap_more_than=1000000000, volumeMoreThan=10000, limit=None):
 
-        '''
-        this endpoint is destined to populate the _______ table.                    #TODO: add table name
-        the 'stock screener' endpoint will fetch the company, 
-        industry peers, and basic stock summary of a given sector.
-        '''
-        
-        params = {
-            'sector': sector,
-            'exchange': exchange,
-            'marketCapMoreThan': market_cap_more_than,
-            'volumeMoreThan': volumeMoreThan,
-            'limit': limit
-        }
-        
-        return self.make_request(self.sector_peers_endpoint, params=params)
-    
-    
-    
     def request_company_profile(self, ticker):
         """
         Get company profile data.
@@ -85,23 +65,76 @@ class FMPClient:
         """
         endpoint = f"stock-screener?sector={sector}&industry={industry}"
         return self.make_request(endpoint)
+    
 
-    def request_financial_statements(self, ticker, statement_type):
+    def request_income_statement(self, symbol: str, period: str = 'annual', datatype: str = 'json', limit: int = 100) -> dict:
         """
-        Get financial statements (income statement, balance sheet, cash flow).
-        :param ticker: Stock ticker symbol.
-        :param statement_type: Type of financial statement ('income', 'balance_sheet', 'cash_flow').
-        :return: JSON response containing the financial statements.
+        Get the income statement for a company.
+        :param symbol: Stock ticker symbol.
+        :param period: Period of the income statement ('annual', 'quarterly').
+        :param datatype: Data type of the response ('json', 'csv').
+        :param limit: Limit the number of items in the response.
+        :return: JSON response containing the income statement.
         """
-        endpoint_map = {
-            'income': "income-statement",
-            'balance_sheet': "balance-sheet-statement",
-            'cash_flow': "cash-flow-statement"
+        endpoint = f"income-statement/{symbol}"
+        params = {
+            'period': period,
+            'datatype': datatype,
+            'limit': limit
         }
-        endpoint = f"{endpoint_map[statement_type]}/{ticker}"
-        return self.make_request(endpoint)
+        return self.make_request(endpoint, params=params)
 
-    def request_historical_price_full(self, ticker):
+    def request_balance_sheet(self, symbol: str, period: str = 'annual', datatype: str = 'json', limit: int = 100) -> dict:
+        """
+        Get the balance sheet statement for a company.
+        :param symbol: Stock ticker symbol.
+        :param period: Period of the balance sheet ('annual', 'quarterly').
+        :param datatype: Data type of the response ('json', 'csv').
+        :param limit: Limit the number of items in the response.
+        :return: JSON response containing the balance sheet.
+        """
+        endpoint = f"balance-sheet-statement/{symbol}"
+        params = {
+            'period': period,
+            'datatype': datatype,
+            'limit': limit
+        }
+        return self.make_request(endpoint, params=params)
+
+    def request_cash_flow_statement(self, symbol: str, period: str = 'annual', datatype: str = 'json', limit: int = 100) -> dict:
+        """
+        Get the cash flow statement for a company.
+        :param symbol: Stock ticker symbol.
+        :param period: Period of the cash flow statement ('annual', 'quarterly').
+        :param datatype: Data type of the response ('json', 'csv').
+        :param limit: Limit the number of items in the response.
+        :return: JSON response containing the cash flow statement.
+        """
+        endpoint = f"cash-flow-statement/{symbol}"
+        params = {
+            'period': period,
+            'datatype': datatype,
+            'limit': limit
+        }
+        return self.make_request(endpoint, params=params)
+
+    def request_income_statement_as_reported(self, symbol: str, period: str = 'annual', limit: int = 50) -> dict:
+        """
+        Get the income statement as reported by the company.
+        :param symbol: Stock ticker symbol.
+        :param period: Period of the income statement ('annual', 'quarterly').
+        :param limit: Limit the number of items in the response.
+        :return: JSON response containing the income statement.
+        """
+        endpoint = f"income-statement-as-reported/{symbol}"
+        params = {
+            'period': period,
+            'limit': limit
+        }
+        return self.make_request(endpoint, params=params)
+
+
+    def request_historical_stock_prices(self, ticker):
         """
         Get historical stock prices.
         :param ticker: Stock ticker symbol.
