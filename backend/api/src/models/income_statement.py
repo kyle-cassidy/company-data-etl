@@ -1,6 +1,6 @@
 class IncomeStatement:
     __table__ = 'income_statements'
-    columns = ['income_statement_id', 'company_id', 'period', 'revenue', 'net_income', 'eps', 'reported_currency']
+    columns = ['income_statement_id', 'company_id', 'period', 'revenue', 'net_income', 'reported_currency', 'eps']
 
     def __init__(self, **kwargs):
         for key in kwargs.keys():

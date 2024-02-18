@@ -1,4 +1,7 @@
-# notes
-venv
-exploratory-data
+notes/
+venv/
+exploratory-data/
 .aider*
+__pycache__/
+secrets/
+.vscode/

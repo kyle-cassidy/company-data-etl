@@ -1,43 +1,53 @@
 import requests
-import numpy as np
-import pandas as pd
-from settings import FMP_API_KEY
+from requests.exceptions import HTTPError
+from secrets.settings import FMP_API_KEY
 
 class FMPClient:
-    '''
-    base client for fetching data from the financialmodelingprep.com API
-    '''
-    # class varaibles
-    FMP_API_KEY = FMP_API_KEY
-    base_url =  'https://financialmodelingprep.com/api/v3/'
     
-    def __init__(self):...
+    def __init__(self,API_KEY=FMP_API_KEY):
+        self.API_KEY = API_KEY
+        self.base_URL = 'https://financialmodelingprep.com/api/v3/'       
+        self.sector_peers_endpoint = 'stock-screener'
     
     
-    def request_sector_peers(self, 
-                             sector = 'Technology', 
-                             exchange = 'NASDAQ', 
-                             market_cap_more_than = 1000000000, 
-                             limit_number_of_peers = 10):
+    def make_request(self, endpoint: str, params=None)-> dict:
+        """
+        Makes a generic GET request to the specified endpoint.
+        :endpoint: API endpoint to be appended to the base host URL.
+        :params: Takes a dictionary as input. Additional parameters for the request.
+        :return: JSON response from the API.
+        """
         
+        if params is None:                              # If no params are passed, 
+            params = {}                                 # initialize an empty dictionary
+        params['apikey'] = self.API_KEY                # Include the API key in every request. add to params dict.
+        URL = f'{self.base_URL}/{endpoint}'             # Construct the URL 
+        response = requests.get(URL, params=params)     # Make the request
+        params.pop('apikey', None)                     # Remove API key from params after request to avoid leaking it.
+        
+        if response.status_code != 200:
+            raise HTTPError(f'API request failed with status code {response.status_code}: {response.text}')
+
+        return response.json()
+
+    
+    def request_sector_peers(self, sector='Technology', exchange='NASDAQ', market_cap_more_than=1000000000, volumeMoreThan=10000, limit=None):
+
         '''
-        Fetches the company peers of a given sector.
-        default sector is 'Technology'
-        default exchange is 'NASDAQ'
-        default market cap is more than 1 billion
-        default limit of companies displayed is 10
+        this endpoint is destined to populate the _______ table.                    #TODO: add table name
+        the 'stock screener' endpoint will fetch the company, 
+        industry peers, and basic stock summary of a given sector.
         '''
-        # verify that the inputs are strings. phase2: add more input validation
-        sector = str(sector)
-        exchange = str(exchange)
-        market_cap_more_than = str(market_cap_more_than)
-        limit_number_of_peers = str(limit_number_of_peers)
         
-        url = self.base_url + f'stock-screener?marketCapMoreThan={market_cap_more_than}&volumeMoreThan=10000§or={sector}&exchange={exchange}&limit={limit_number_of_peers}&apikey={FMP_API_KEY}'
-                                                                                    
-        response = requests.get(url)
-        data = response.json()
+        params = {
+            'sector': sector,
+            'exchange': exchange,
+            'marketCapMoreThan': market_cap_more_than,
+            'volumeMoreThan': volumeMoreThan,
+            'limit': limit
+        }
         
-        return data
+        return self.make_request(self.sector_peers_endpoint, params=params)
+    
     
     

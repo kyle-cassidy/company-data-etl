@@ -1,7 +1,7 @@
 from flask import current_app
 from flask import g
 import psycopg2
-from settings import DB_USER, DB_NAME, DB_HOST, DB_PASSWORD, DEBUG, TESTING #TODO: check config imports
+from backend.secrets.settings import DB_USER, DB_NAME, DB_HOST, DB_PASSWORD, DEBUG, TESTING #TODO: check config imports
 
 #TODO: build main db connection
 
@@ -68,10 +68,9 @@ def drop_tables(table_names, cursor, conn):
     for table_name in table_names:
         drop_records(cursor, conn, table_name)
 
-def drop_all_tables(conn, cursor):
-                                    # FIXME
-    table_names = ['venue_categories', 'locations', 'zipcodes', 'cities', 'states', 'categories', 'venues']
-    drop_tables(table_names, cursor, conn)
+# def drop_all_tables(conn, cursor):
+#     table_names = [] 
+#     drop_tables(table_names, cursor, conn)
 
 def find_by_name(Class, name, cursor):
     query = f"""SELECT * FROM {Class.__table__} WHERE name = %s """
