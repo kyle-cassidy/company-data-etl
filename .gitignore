@@ -5,3 +5,4 @@ exploratory-data/
 __pycache__/
 secrets/
 .vscode/
+documentation
