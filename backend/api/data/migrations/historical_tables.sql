@@ -1,7 +1,4 @@
-
-
--- historical_companies_data
--- These historical tables allow us to track changes over time for each entity in the database. also need to implement triggers or application logic to populate these historical tables whenever changes are made to the main tables.
+-- [ ] FIXME: the schema in this file need to match create_tables.sql
 
 -- historical_companies_data
 CREATE TABLE historical_companies (
@@ -12,7 +9,7 @@ CREATE TABLE historical_companies (
     industry_id INT REFERENCES industries(industry_id),
     sector_id INT REFERENCES sectors(sector_id),
     exchange_id INT REFERENCES exchanges(exchange_id),
-    country_id INT REFERENCES countries(country_id),
+    location_id INT REFERENCES locations(location_id),
     cik VARCHAR(255),
     is_etf BOOLEAN,
     is_actively_trading BOOLEAN,
@@ -66,3 +63,4 @@ CREATE TABLE historical_etf_holdings (
     effective_date TIMESTAMP NOT NULL,
     operation_type VARCHAR(10) NOT NULL CHECK (operation_type IN ('INSERT', 'UPDATE', 'DELETE'))
 );
+
