@@ -8,6 +8,7 @@ secrets/
 documentation
 tasks/
 backend/api/data/seed
+.DS_Store
 
 
 
