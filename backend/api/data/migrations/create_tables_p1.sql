@@ -1,36 +1,9 @@
 
-CREATE TABLE locations (
-    location_id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    company_id INT REFERENCES companies(company_id),
-    country_id INT REFERENCES countries(country_id),
-    state_id INT REFERENCES states(state_id),
-    city_id INT REFERENCES cities(city_id),
-    zip_code VARCHAR(10),
-    address TEXT
-);
 
-CREATE TABLE countries (
-    country_id SERIAL PRIMARY KEY,
+
+CREATE TABLE sectors (
+    sector_id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL
-);
-
-CREATE TABLE states (
-    state_id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    country_id INT REFERENCES countries(country_id)
-);
-
-CREATE TABLE cities (
-    city_id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    state_id INT REFERENCES states(state_id)
-);
-
-CREATE TABLE zip_codes (
-    zip_code_id SERIAL PRIMARY KEY,
-    zip_code VARCHAR(10) NOT NULL,
-    city_id INT REFERENCES cities(city_id)
 );
 
 CREATE TABLE industries (
@@ -39,17 +12,10 @@ CREATE TABLE industries (
     sector_id INT REFERENCES sectors(sector_id),
     description TEXT
 );
-
-CREATE TABLE sectors (
-    sector_id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
-);
-
 CREATE TABLE exchanges (
     exchange_id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     short_name VARCHAR(255),
-    country_id INT REFERENCES countries(country_id)
 );
 
 CREATE TABLE companies (
@@ -125,15 +91,57 @@ CREATE TABLE analyst_ratings (
     date DATE NOT NULL
 );
 
+CREATE TABLE stock_market_indexes (
+    index_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    symbol VARCHAR(10) UNIQUE NOT NULL,
+    exchange_id INT REFERENCES exchanges(exchange_id),
+    description TEXT
+);
+
+CREATE TABLE locations (
+    location_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    country_id INT REFERENCES countries(country_id),
+    state_id INT REFERENCES states(state_id),
+    city_id INT REFERENCES cities(city_id),
+    zip_code VARCHAR(10),
+    address TEXT
+);
+
+CREATE TABLE countries (
+    country_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE states (
+    state_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    country_id INT REFERENCES countries(country_id)
+);
+
+CREATE TABLE cities (
+    city_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    state_id INT REFERENCES states(state_id)
+);
+
+CREATE TABLE zip_codes (
+    zip_code_id SERIAL PRIMARY KEY,
+    zip_code VARCHAR(10) NOT NULL,
+    city_id INT REFERENCES cities(city_id)
+);
+
 
 -- Indexes
 -- indexes work in the background to speed up the retrieval of rows by providing quick access paths to data.
 
 CREATE INDEX idx_prices_company_id ON stocks(company_id);
-CREATE INDEX idx_companies_country_id ON companies(country_id);
 CREATE INDEX idx_ownership_company_id ON ownership(company_id);
 CREATE INDEX idx_income_statements_company_id ON income_statements(company_id);
 CREATE INDEX idx_balance_sheets_company_id ON balance_sheets(company_id);
 CREATE INDEX idx_cashflow_statements_company_id ON cashflow_statements(company_id);
 CREATE INDEX idx_analyst_ratings_company_id ON analyst_ratings(company_id);
+CREATE INDEX idx_stock_market_indexes_exchange_id ON stock_market_indexes(exchange_id);
+
 
