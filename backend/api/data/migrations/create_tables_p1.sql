@@ -60,7 +60,7 @@ CREATE TABLE companies (
     industry_id INT REFERENCES industries(industry_id),
     sector_id INT REFERENCES sectors(sector_id),
     exchange_id INT REFERENCES exchanges(exchange_id),
-    location_id INT REFERENCES countries(location_id),
+    location_id INT REFERENCES locations(location_id),
     cik VARCHAR(255) UNIQUE,
     is_etf BOOLEAN,
     is_actively_trading BOOLEAN
@@ -76,7 +76,7 @@ CREATE TABLE income_statements (
     reported_currency VARCHAR(10)
 );
 
-CREATE TABLES balance_sheets (
+CREATE TABLE balance_sheets (
     balance_sheet_id SERIAL PRIMARY KEY,
     company_id INT REFERENCES companies(company_id),
     period DATE NOT NULL,
@@ -133,6 +133,6 @@ CREATE INDEX idx_companies_country_id ON companies(country_id);
 CREATE INDEX idx_ownership_company_id ON ownership(company_id);
 CREATE INDEX idx_income_statements_company_id ON income_statements(company_id);
 CREATE INDEX idx_balance_sheets_company_id ON balance_sheets(company_id);
-CREATE INDEX idx_statement_of_cashflows_company_id ON statement_of_cashflows(company_id);
+CREATE INDEX idx_cashflow_statements_company_id ON cashflow_statements(company_id);
 CREATE INDEX idx_analyst_ratings_company_id ON analyst_ratings(company_id);
 
