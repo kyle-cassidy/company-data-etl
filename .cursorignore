@@ -1,12 +1,9 @@
-notes/
 venv/
 exploratory-data/
 .aider*
 __pycache__/
 secrets/
 .vscode/
-documentation
-tasks/
 backend/api/data/seed
 
 
