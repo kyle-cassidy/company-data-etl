@@ -1,5 +1,5 @@
 from api.src.db import db
-import api.src.models as model
+import api.src.models as models
 
 
 class Location:
