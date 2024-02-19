@@ -1,5 +1,26 @@
 
+CREATE TABLE countries (
+    country_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
 
+CREATE TABLE states (
+    state_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    country_id INT REFERENCES countries(country_id)
+);
+
+CREATE TABLE cities (
+    city_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    state_id INT REFERENCES states(state_id)
+);
+
+CREATE TABLE zip_codes (
+    zip_code_id SERIAL PRIMARY KEY,
+    zip_code VARCHAR(10) NOT NULL,
+    city_id INT REFERENCES cities(city_id)
+);
 
 CREATE TABLE sectors (
     sector_id SERIAL PRIMARY KEY,
@@ -12,10 +33,21 @@ CREATE TABLE industries (
     sector_id INT REFERENCES sectors(sector_id),
     description TEXT
 );
+
 CREATE TABLE exchanges (
     exchange_id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    short_name VARCHAR(255),
+    short_name VARCHAR(255)
+);
+
+CREATE TABLE locations (
+    location_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    country_id INT REFERENCES countries(country_id),
+    state_id INT REFERENCES states(state_id),
+    city_id INT REFERENCES cities(city_id),
+    zip_code VARCHAR(10),
+    address TEXT
 );
 
 CREATE TABLE companies (
@@ -96,40 +128,6 @@ CREATE TABLE stock_market_indexes (
     exchange_id INT REFERENCES exchanges(exchange_id),
     description TEXT
 );
-
-CREATE TABLE locations (
-    location_id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    country_id INT REFERENCES countries(country_id),
-    state_id INT REFERENCES states(state_id),
-    city_id INT REFERENCES cities(city_id),
-    zip_code VARCHAR(10),
-    address TEXT
-);
-
-CREATE TABLE countries (
-    country_id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
-);
-
-CREATE TABLE states (
-    state_id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    country_id INT REFERENCES countries(country_id)
-);
-
-CREATE TABLE cities (
-    city_id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    state_id INT REFERENCES states(state_id)
-);
-
-CREATE TABLE zip_codes (
-    zip_code_id SERIAL PRIMARY KEY,
-    zip_code VARCHAR(10) NOT NULL,
-    city_id INT REFERENCES cities(city_id)
-);
-
 
 -- Indexes
 -- indexes work in the background to speed up the retrieval of rows by providing quick access paths to data.

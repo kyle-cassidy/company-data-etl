@@ -1,18 +1,20 @@
-from backend.api.src.utils.seed_adapters.seed_adapters import SeedAdapter, seed_database_from_csv
+from backend.api.src.db.db import get_db
+from backend.api.src.utils.seed_adapters.seed_adapters import SP500Seeder
+
 
 sp500_companies = '/Users/kielay/Developer/projects/company-data-etl/backend/api/data/seed/sp500/sp500_companies.csv'
 sp500_stocks = '/Users/kielay/Developer/projects/company-data-etl/backend/api/data/seed/sp500/sp500_stocks.csv'
 sp500_index = '/Users/kielay/Developer/projects/company-data-etl/backend/api/data/seed/sp500/sp500_index.csv'
 
-def seed_sp500_data():
-    conn = get_db()
+def seed_sp500_data(conn=get_db()):
+    conn = conn
     seeder = SP500Seeder(conn)
     seeder.seed_companies('/path/to/sp500_companies.csv')
     seeder.seed_stocks('/path/to/sp500_stocks.csv')
     seeder.seed_index('/path/to/sp500_index.csv')
     seeder.close()
 
-seed_sp500_data()
+
 
 
 
