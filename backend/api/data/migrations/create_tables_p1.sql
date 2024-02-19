@@ -21,13 +21,12 @@ CREATE TABLE exchanges (
 CREATE TABLE companies (
     company_id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    stock_id INT REFERENCES stocks(stock_id),
     ticker_symbol VARCHAR(10) UNIQUE NOT NULL,
     industry_id INT REFERENCES industries(industry_id),
     sector_id INT REFERENCES sectors(sector_id),
     exchange_id INT REFERENCES exchanges(exchange_id),
     location_id INT REFERENCES locations(location_id),
-    cik VARCHAR(255) UNIQUE,
+    cik CHAR(10) UNIQUE,
     is_etf BOOLEAN,
     is_actively_trading BOOLEAN
 );
@@ -64,7 +63,6 @@ CREATE TABLE cashflow_statements (
 
 CREATE TABLE stocks (
     stock_id SERIAL PRIMARY KEY,
-    ticker_symbol VARCHAR(10) UNIQUE NOT NULL,
     company_id INT REFERENCES companies(company_id),
     date DATE NOT NULL,
     open_price DECIMAL(10,2),
