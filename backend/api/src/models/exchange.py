@@ -2,7 +2,7 @@
 
 class Exchange:
     __table__ = 'exchanges'
-    columns = ['exchange_id', 'name', 'shortName', 'country_id']
+    columns = ['exchange_id', 'name', 'short_name', 'country_id']
 
     def __init__(self, **kwargs):
         for key in kwargs.keys():

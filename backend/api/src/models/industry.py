@@ -1,8 +1,7 @@
 
-
 class Industry:
     __table__ = 'industries'
-    columns = ['industry_id', 'name', 'description']
+    columns = ['industry_id', 'name', 'sector_id', 'description']
 
     def __init__(self, **kwargs):
         for key in kwargs.keys():
