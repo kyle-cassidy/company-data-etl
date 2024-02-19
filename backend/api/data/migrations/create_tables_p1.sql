@@ -56,6 +56,7 @@ CREATE TABLE companies (
     company_id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     stock_id INT REFERENCES stocks(stock_id),
+    ticker_symbol VARCHAR(10) UNIQUE NOT NULL,
     industry_id INT REFERENCES industries(industry_id),
     sector_id INT REFERENCES sectors(sector_id),
     exchange_id INT REFERENCES exchanges(exchange_id),
