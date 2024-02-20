@@ -4,7 +4,7 @@ import api.src.models as models
 
 class Location:
     __table__ = 'locations'
-    columns = ['location_id', 'name', 'country_id', 'state_id', 'city_id', 'zip_code', 'address']
+    columns = ['id', 'name', 'country_id', 'state_id', 'city_id', 'zip_code', 'address']
 
     def __init__(self, **kwargs):
         for key in kwargs.keys():
@@ -15,7 +15,7 @@ class Location:
 
 class Country:
     __table__ = 'countries'
-    columns = ['country_id', 'name']
+    columns = ['id', 'name']
 
     def __init__(self, **kwargs):
         for key in kwargs.keys():
@@ -26,7 +26,7 @@ class Country:
             
 class State:
     __table__ = 'states'
-    columns = ['state_id', 'name', 'country_id']
+    columns = ['id', 'name', 'country_id']
 
     def __init__(self, **kwargs):
         for key in kwargs.keys():
@@ -43,7 +43,7 @@ class State:
     
 class City:
     __table__ = 'cities'
-    columns = ['city_id', 'name', 'state_id']
+    columns = ['id', 'name', 'state_id']
 
     def __init__(self, **kwargs):
         for key in kwargs.keys():
@@ -60,7 +60,7 @@ class City:
     
 class ZipCode:
     __table__ = 'zip_codes'
-    columns = ['zip_code_id', 'zip_code', 'city_id']
+    columns = ['id', 'zip_code', 'city_id']
 
     def __init__(self, **kwargs):
         for key in kwargs.keys():

@@ -1,6 +1,6 @@
 class StockMarketIndex:
     __table__ = 'stock_market_indexes'
-    columns = ['index_id', 'name', 'symbol', 'exchange_id', 'description']
+    columns = ['id', 'name', 'symbol', 'exchange_id', 'description']
 
     def __init__(self, **kwargs):
         for key in kwargs.keys():

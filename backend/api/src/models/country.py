@@ -2,7 +2,7 @@
 
 class Country:
     __table__ = 'countries'
-    columns = ['country_id', 'name']
+    columns = ['id', 'name']  # No change needed, already using 'id'
 
     def __init__(self, **kwargs):
         for key in kwargs.keys():

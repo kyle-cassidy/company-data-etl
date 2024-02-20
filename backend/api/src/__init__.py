@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
-from backend.api.src.utils.temp.data_adapters import load_json, CompanyAdapter
-from src.clients.fmp_client import FMPClient
+# from backend.api.src.utils.temp.data_adapters import load_json, CompanyAdapter
+# from src.clients.fmp_client import FMPClient
 import api.src.db as db
 
 def create_app(config_class):

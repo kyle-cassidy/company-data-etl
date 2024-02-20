@@ -3,7 +3,7 @@ import api.src.models as models
 
 class Category:
     __table__ = 'categories'
-    columns = ['id', 'name']
+    columns = ['id', 'name']  # No change needed, already using 'id'
 
     def __init__(self, **kwargs):
         for key in kwargs.keys():

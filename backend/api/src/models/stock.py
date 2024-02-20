@@ -1,6 +1,6 @@
 class Stock:
     __table__ = 'stocks'
-    columns = ['stock_id', 'company_id', 'date', 'open_price', 'high_price', 'low_price', 'close_price', 'adjusted_close_price', 'volume']
+    columns = ['id', 'company_id', 'date', 'open_price', 'high_price', 'low_price', 'close_price', 'adjusted_close_price', 'volume']
 
     def __init__(self, **kwargs):
         for key in kwargs.keys():

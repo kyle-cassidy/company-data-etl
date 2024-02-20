@@ -1,36 +1,52 @@
 from flask import current_app
 from flask import g
-import psycopg2
 # from backend.secrets.settings import DB_USER, DB_NAME, DB_HOST, DB_PASSWORD, DEBUG, TESTING #TODO: check config imports
-from backend.config import Config, DevelopmentConfig, TestingConfig, ProductionConfig
+from config import Config, DevelopmentConfig, TestingConfig, ProductionConfig
+import psycopg2
+from psycopg2 import connect
+from psycopg2.extensions import make_dsn
+from config import current_config
+
+dsn = make_dsn(
+    host=current_config.DB_HOST,  # Use the actual host from the configuration
+    dbname=current_config.DB_NAME,
+    user=current_config.DB_USER,
+    password=current_config.DB_PASSWORD
+)
+
+conn = connect(dsn)
+
 
 #TODO: build main db connection
 
-conn = psycopg2.connect(
-    host = Config.DB_HOST, 
-    database = Config.DB_NAME,
-    user = Config.DB_USER, 
-    password = Config.DB_PASSWORD
-    )
+# conn = psycopg2.connect(
+#     host = Config.DB_HOST, 
+#     database = Config.DB_NAME,
+#     user = Config.DB_USER, 
+#     password = Config.DB_PASSWORD
+#     )
 
-# conn = psycopg2.connect(host = DB_HOST, database = DB_NAME,
-#         user = DB_USER, password = DB_PASSWORD)
+# # conn = psycopg2.connect(host = DB_HOST, database = DB_NAME,
+# #         user = DB_USER, password = DB_PASSWORD)
 
-test_conn = psycopg2.connect(
-    host = DB_HOST, 
-    database = DB_NAME,
-    user = DB_USER, 
-    password = DB_PASSWORD
-    )
+# test_conn = psycopg2.connect(
+#     host = DB_HOST, 
+#     database = DB_NAME,
+#     user = DB_USER, 
+#     password = DB_PASSWORD
+#     )
 
-test_cursor = test_conn.cursor()
+# test_cursor = test_conn.cursor()
 
 def get_db():
-    if "db" not in g:
-        g.db = psycopg2.connect(user = current_app.config['DB_USER'],
-                password = current_app.config['DB_PASSWORD'],
-            dbname = current_app.config['DATABASE'])
-    return g.db
+    with current_app.app_context():
+        if "db" not in g:
+            g.db = psycopg2.connect(
+                host=current_config.DB_HOST,
+                user=current_config.DB_USER,
+                password=current_config.DB_PASSWORD,
+                dbname=current_config.DB_NAME)
+        return g.db
 
 def close_db(e=None):
     db = g.pop("db", None)

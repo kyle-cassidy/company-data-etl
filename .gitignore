@@ -9,6 +9,10 @@ documentation
 tasks/
 backend/api/data/seed
 .DS_Store
+secrets_manager/
+../.python-version
+config.md
+
 
 
 

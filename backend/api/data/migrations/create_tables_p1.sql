@@ -1,71 +1,71 @@
 
 CREATE TABLE countries (
-    country_id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE states (
-    state_id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    country_id INT REFERENCES countries(country_id)
+    country_id INT REFERENCES countries(id)
 );
 
 CREATE TABLE cities (
-    city_id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    state_id INT REFERENCES states(state_id)
+    state_id INT REFERENCES states(id)
 );
 
 CREATE TABLE zip_codes (
-    zip_code_id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     zip_code VARCHAR(10) NOT NULL,
-    city_id INT REFERENCES cities(city_id)
+    city_id INT REFERENCES cities(id)
 );
 
 CREATE TABLE sectors (
-    sector_id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE industries (
-    industry_id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    sector_id INT REFERENCES sectors(sector_id),
+    sector_id INT REFERENCES sectors(id),
     description TEXT
 );
 
 CREATE TABLE exchanges (
-    exchange_id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     short_name VARCHAR(255)
 );
 
 CREATE TABLE locations (
-    location_id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    country_id INT REFERENCES countries(country_id),
-    state_id INT REFERENCES states(state_id),
-    city_id INT REFERENCES cities(city_id),
+    country_id INT REFERENCES countries(id),
+    state_id INT REFERENCES states(id),
+    city_id INT REFERENCES cities(id),
     zip_code VARCHAR(10),
     address TEXT
 );
 
 CREATE TABLE companies (
-    company_id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     ticker_symbol VARCHAR(10) UNIQUE NOT NULL,
-    industry_id INT REFERENCES industries(industry_id),
-    sector_id INT REFERENCES sectors(sector_id),
-    exchange_id INT REFERENCES exchanges(exchange_id),
-    location_id INT REFERENCES locations(location_id),
+    industry_id INT REFERENCES industries(id),
+    sector_id INT REFERENCES sectors(id),
+    exchange_id INT REFERENCES exchanges(id),
+    location_id INT REFERENCES locations(id),
     cik CHAR(10) UNIQUE,
     is_etf BOOLEAN,
     is_actively_trading BOOLEAN
 );
 
 CREATE TABLE income_statements (
-    income_statement_id SERIAL PRIMARY KEY,
-    company_id INT REFERENCES companies(company_id),
+    id SERIAL PRIMARY KEY,
+    company_id INT REFERENCES companies(id),
     period DATE NOT NULL,
     revenue DECIMAL(15,2),
     net_income DECIMAL(15,2),
@@ -74,8 +74,8 @@ CREATE TABLE income_statements (
 );
 
 CREATE TABLE balance_sheets (
-    balance_sheet_id SERIAL PRIMARY KEY,
-    company_id INT REFERENCES companies(company_id),
+    id SERIAL PRIMARY KEY,
+    company_id INT REFERENCES companies(id),
     period DATE NOT NULL,
     total_debt DECIMAL(15,2),
     total_equity DECIMAL(15,2),
@@ -83,8 +83,8 @@ CREATE TABLE balance_sheets (
 );
 
 CREATE TABLE cashflow_statements (
-    cashflow_statement_id SERIAL PRIMARY KEY,
-    company_id INT REFERENCES companies(company_id),
+    id SERIAL PRIMARY KEY,
+    company_id INT REFERENCES companies(id),
     period DATE NOT NULL,
     net_operating_cashflow DECIMAL(15,2),
     net_investing_cashflow DECIMAL(15,2),
@@ -94,8 +94,8 @@ CREATE TABLE cashflow_statements (
 );
 
 CREATE TABLE stocks (
-    stock_id SERIAL PRIMARY KEY,
-    company_id INT REFERENCES companies(company_id),
+    id SERIAL PRIMARY KEY,
+    company_id INT REFERENCES companies(id),
     date DATE NOT NULL,
     open_price DECIMAL(10,2),
     high_price DECIMAL(10,2),
@@ -106,26 +106,26 @@ CREATE TABLE stocks (
 );
 
 CREATE TABLE ownership (
-    ownership_id SERIAL PRIMARY KEY,
-    company_id INT REFERENCES companies(company_id),
+    id SERIAL PRIMARY KEY,
+    company_id INT REFERENCES companies(id),
     holder_name VARCHAR(255),
     shares_held BIGINT,
     date DATE NOT NULL
 );
 
 CREATE TABLE analyst_ratings (
-    rating_id SERIAL PRIMARY KEY,
-    company_id INT REFERENCES companies(company_id),
+    id SERIAL PRIMARY KEY,
+    company_id INT REFERENCES companies(id),
     analyst_name VARCHAR(255),
     rating VARCHAR(255),
     date DATE NOT NULL
 );
 
 CREATE TABLE stock_market_indexes (
-    index_id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     symbol VARCHAR(10) UNIQUE NOT NULL,
-    exchange_id INT REFERENCES exchanges(exchange_id),
+    exchange_id INT REFERENCES exchanges(id),
     description TEXT
 );
 
@@ -139,5 +139,3 @@ CREATE INDEX idx_balance_sheets_company_id ON balance_sheets(company_id);
 CREATE INDEX idx_cashflow_statements_company_id ON cashflow_statements(company_id);
 CREATE INDEX idx_analyst_ratings_company_id ON analyst_ratings(company_id);
 CREATE INDEX idx_stock_market_indexes_exchange_id ON stock_market_indexes(exchange_id);
-
-
