@@ -5,3 +5,7 @@ psycopg2-binary
 flask
 streamlit
 pytest
+matplotlib 
+seaborn 
+scikit-learn
+sqlalchemy
