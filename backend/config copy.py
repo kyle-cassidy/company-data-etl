@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-
+# default_config = 'testing'
 class Config:
     pass
 
@@ -30,15 +30,12 @@ current_config = None
 
 def set_config():
     global current_config
-    env = os.getenv('FLASK_ENV', 'testing').lower()
+    env = os.getenv('FLASK_ENV', 'development').lower()
     if env == 'development':
-        print('DevelopmentConfig')
         current_config = DevelopmentConfig
     elif env == 'testing':
-        print('TestingConfig')
         current_config = TestingConfig
     elif env == 'production':
-        print('ProductionConfig')
         current_config = ProductionConfig
     else:
         raise ValueError(f"Unknown FLASK_ENV: {env}")

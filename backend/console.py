@@ -1,7 +1,21 @@
 from api.src.clients.fmp_client import FMPClient
 from api.src.utils.seed_adapters.run_seed_adapters import seed_sp500_data
-from config import Config, DevelopmentConfig, TestingConfig, ProductionConfig 
+from config import current_config
 import psycopg2
+from api.src import create_app 
+
+from flask import current_app, g
+from api.src.db import (
+    get_db, close_db, save, build_from_record, build_from_records,
+    find, find_all, values, keys, drop_tables, drop_records,
+    find_or_create_by_name, find_or_build_by_name
+)
+
+
+
+
+
+
 
 client = FMPClient()
 
@@ -16,33 +30,16 @@ client = FMPClient()
 # print(client.request_income_statement_as_reported('AAPL'))
 # print(client.request_historical_stock_prices('AAPL'))
 
-# these may be defunct
-# print(client.request_institutional_stock_ownership('AAPL'))
-# print(client.request_analyst_stock_recommendations('AAPL'))
 
 
-# test_conn = psycopg2.connect(
-#     host = Config.DB_HOST, 
-#     database = Config.DB_NAME,
-#     user = Config.DB_USER, 
-#     password = Config.DB_PASSWORD
-#     )
-
-# test_conn = psycopg2.connect(
-#     host = TestingConfig.DB_HOST, 
-#     database = TestingConfig.DB_NAME,
-#     user = TestingConfig.DB_USER, 
-#     password = TestingConfig.DB_PASSWORD
-#     )
-# test_cursor = test_conn.cursor()
-
-# seed_database_with_sp500_data = seed_sp500_data(test_conn)
 
 
-from api.src import create_app 
-from api.src.utils.seed_adapters.run_seed_adapters import seed_sp500_data
-import psycopg2
 
-app = create_app(config_class=TestingConfig)
-with app.app_context():
-    seed_sp500_data()
+
+
+# from api.src import create_app
+
+# app = create_app()
+# app.run(debug = True, host = '0.0.0.0')
+
+seed_sp500_data()

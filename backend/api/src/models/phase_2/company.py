@@ -1,4 +1,3 @@
-
 class Company:
     __table__ = 'companies'
     columns = ['id', 'name', 'ticker_symbol', 'industry_id', 'sector_id', 'exchange_id', 'location_id', 'cik', 'isEtf', 'isActivelyTrading']
