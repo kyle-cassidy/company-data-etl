@@ -12,16 +12,18 @@
 - [x] update schema to adhere to 2nd formal form. 
 
 
-### adapters -> psql map
-- [ ] company -> companies 
+### adapters
+- [x] seedAdapter
 - [ ] 
 ### models
 - [x] refactor the financial python model class into three models
 - [ ] build model relations
+- [ ] build model methods to interact with the database and do analysis
 
 ### app
 - [ ] Initialize Flask application.
-- [ ] 
+- [ ] Initialize streamlit application
+- [ ] connect to eachother via API
 
 - [ ] Write utility scripts.
 - [ ] Write tests.
