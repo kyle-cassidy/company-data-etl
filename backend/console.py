@@ -1,3 +1,9 @@
+import numpy as np # linear algebra
+import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.metrics import mean_squared_error
+
 from api.src.clients.fmp_client import FMPClient
 from api.src.utils.seed_adapters.run_seed_adapters import seed_sp500_data
 from config import current_config
@@ -42,4 +48,4 @@ client = FMPClient()
 # app = create_app()
 # app.run(debug = True, host = '0.0.0.0')
 
-seed_sp500_data()
+# seed_sp500_data()
