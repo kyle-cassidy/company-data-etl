@@ -1,7 +1,7 @@
 python-dotenv
 requests
-numpy 
 pandas
-psycopg2
+psycopg2-binary
 flask
 streamlit
+pytest
