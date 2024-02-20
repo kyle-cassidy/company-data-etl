@@ -2,7 +2,7 @@
 
 class Sector:
     __table__ = 'sectors'
-    columns = ['sector_id', 'name']
+    columns = ['id', 'name']
 
     def __init__(self, **kwargs):
         for key in kwargs.keys():

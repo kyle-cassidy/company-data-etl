@@ -2,7 +2,7 @@
 
 class Ownership:
     __table__ = 'ownership'
-    columns = ['ownership_id', 'company_id', 'holder_name', 'shares_held', 'date']
+    columns = ['id', 'company_id', 'holder_name', 'shares_held', 'date']
 
     def __init__(self, **kwargs):
         for key in kwargs.keys():

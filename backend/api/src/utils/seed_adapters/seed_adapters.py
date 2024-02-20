@@ -1,5 +1,5 @@
-from backend.api.src.db.db import get_db, save, find_or_create_by_name
-import backend.api.src.models as models
+from ...db.db import get_db, save, find_or_create_by_name
+from ... import models
 import pandas as pd
 
 class SP500Seeder:

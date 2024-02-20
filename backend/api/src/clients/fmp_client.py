@@ -1,6 +1,6 @@
 import requests
 from requests.exceptions import HTTPError
-from secrets.settings import FMP_API_KEY
+from secrets_manager.settings import FMP_API_KEY
 
 class FMPClient:
 

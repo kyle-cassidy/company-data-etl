@@ -1,6 +1,6 @@
 class CashFlowStatement:
     __table__ = 'cash_flow_statements'
-    columns = ['cashflow_statement_id', 'company_id', 'period', 'net_operating_cashflow', 'net_investing_cashflow', 'net_financing_cashflow', 'net_change_in_cash', 'reported_currency']
+    columns = ['id', 'company_id', 'period', 'net_operating_cashflow', 'net_investing_cashflow', 'net_financing_cashflow', 'net_change_in_cash', 'reported_currency']
 
     def __init__(self, **kwargs):
         for key in kwargs.keys():
