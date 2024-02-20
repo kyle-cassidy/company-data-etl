@@ -12,6 +12,7 @@ backend/api/data/seed
 secrets_manager/
 ../.python-version
 config.md
+analysis/
 
 
 
