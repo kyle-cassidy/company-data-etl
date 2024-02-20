@@ -7,12 +7,16 @@ secrets/
 .vscode/
 documentation
 tasks/
-backend/api/data/seed
+backend/api/data/seed/SEC-EDGAR
 .DS_Store
 secrets_manager/
 ../.python-version
 config.md
 analysis/
+backend/api/src/utils/etl_adapters
+backend/api/src/utils/temp
+config copy.py
+config.md
 
 
 

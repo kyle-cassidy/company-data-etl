@@ -1,5 +1,6 @@
-import numpy as np # linear algebra
-import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
+# this area is used for testing.
+import numpy as np
+import pandas as pd 
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.metrics import mean_squared_error
@@ -18,11 +19,6 @@ from api.src.db import (
 )
 
 
-
-
-
-
-
 client = FMPClient()
 
 # testing daily API requests 
@@ -37,15 +33,9 @@ client = FMPClient()
 # print(client.request_historical_stock_prices('AAPL'))
 
 
-
-
-
-
-
-
 # from api.src import create_app
 
 # app = create_app()
 # app.run(debug = True, host = '0.0.0.0')
-
+from api.src.utils.seed_adapters.run_seed_adapters import seed_sp500_data
 # seed_sp500_data()

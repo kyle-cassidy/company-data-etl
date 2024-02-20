@@ -23,6 +23,21 @@ Ensure you have the following installed:
    pip install -r requirements.txt
    ```
 
+## Seed the Database and Setup Connection
+
+1. Create a `.env` file in the root directory of the project and add the following environment variables:
+   ```sh
+   DATABASE_URL=postgresql://username:password@localhost:5432/<name-of-your-db>
+   ```
+2. Run the following command to create the database tables and seed the database with data. Ensure you are in the `backend` directory before executing:
+3. 
+   ```sh
+   python3 seed_db.py 
+   ```
+   This script should be responsible for setting up your database tables and seeding them with the initial data required for the application to run properly. it may tak a long time to populate the database with the data from the SEC EDGAR and FMP-API clients. 
+   ```
+
+
 ## Running the Application
 
 this is currently under construction
