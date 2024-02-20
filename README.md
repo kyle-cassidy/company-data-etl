@@ -25,6 +25,8 @@ Ensure you have the following installed:
 
 ## Seed the Database and Setup Connection
 
+!!! data has been removed from the repo for the time being. the pre hook was denied due to its large size. more details on deployment and data storage to come.!!!
+
 1. Create a `.env` file in the root directory of the project and add the following environment variables:
    ```sh
    DATABASE_URL=postgresql://username:password@localhost:5432/<name-of-your-db>
