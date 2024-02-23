@@ -28,9 +28,9 @@ config.md
 backend/api/src/utils/temp/
 backend/api/data/seed-sp500/sp500_stocks/.2010-2019
 backend/api/data/sp500_p1.sqlite
-
-
-
+backend/api/src/db/db copy.py
+frontend/view_functions.py
+frontend/index.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
