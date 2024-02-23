@@ -121,14 +121,6 @@ def find_all(Class, cursor):
     return [build_from_record(Class, record) for record in records]
 
 
-
-# def find(Class, id, cursor):                                          # find() was written for postgres
-#     sql_str = f"SELECT * FROM {Class.__table__} WHERE id = %s"        # postgres %s convention for parameterized queries
-#     cursor.execute(sql_str, (id,))
-#     record = cursor.fetchone()
-#     return build_from_record(Class, record)
-
-
 # updated find() method for SQLite should also work for PostgreSQL. # TODO: test this method with PostgreSQL
 def find(Class, id, cursor):
     sql_str = f"SELECT * FROM {Class.__table__} WHERE id = :id"
@@ -142,57 +134,26 @@ def find_by_symbol(Class, symbol, cursor):
     record = cursor.fetchone()
     return build_from_record(Class, record)
 
-
-# FIXME: toggling save method for SQLite and PostgreSQL. need to migrate to SQLalchemy ORM
-
-###   original save method
-# def save(obj, conn, cursor):
-#     s_str = ', '.join(len(values(obj)) * ['%s'])
-#     obj_str = f"""INSERT INTO {obj.__table__} ({keys(obj)}) VALUES ({s_str});"""
-#     cursor.execute(obj_str, list(values(obj)))
-#     conn.commit()
-#     cursor.execute(f'SELECT * FROM {obj.__table__} ORDER BY id DESC LIMIT 1')
-#     record = cursor.fetchone()
-#     return build_from_record(type(obj), record)
-
-
-###  SQLITE SAVE METHOD
 def save(obj, conn, cursor):
-    s_str = ', '.join(len(values(obj)) * ['?'])  # Changed from '%s' to '?'
-    obj_str = f"""INSERT INTO {obj.__table__} ({keys(obj)}) VALUES ({s_str});"""
-    cursor.execute(obj_str, list(values(obj)))
+    keys_list = keys(obj).split(', ')                                                       # Extracting keys (column names) and values from the object
+    values_dict = {key: getattr(obj, key) for key in keys_list}
+    
+    column_names = ', '.join(keys_list)                                                     # Constructing the parameterized column names
+    placeholders = ', '.join([f":{key}" for key in keys_list])                              # and values placeholders
+    
+    insert_query = f"""
+    INSERT INTO {obj.__table__} ({column_names}) 
+    VALUES ({placeholders});
+    """                                                                                     # Constructing the INSERT statement
+    cursor.execute(insert_query, values_dict)                                               # Executing the INSERT statement
     conn.commit()
-    last_id = cursor.lastrowid  # Get the last inserted id for SQLite
-    cursor.execute(f"SELECT * FROM {obj.__table__} WHERE id = ?", (last_id,))  # Changed from '%s' to '?'
+    
+    last_id = cursor.lastrowid if hasattr(cursor, 'lastrowid') else cursor.fetchone()[0]    # Get the last inserted id for SQLite or PostgreSQL
+    
+    cursor.execute(f"SELECT * FROM {obj.__table__} WHERE id = :id", {'id': last_id})        # Fetching the newly inserted record by its id
     record = cursor.fetchone()
-    return build_from_record(type(obj), record)
-
-
-# ###  POSTGRES SAVE METHOD
-# def save(obj, conn, cursor):
-#     # Extracting keys (column names) and values from the object
-#     keys = [key for key in obj.columns if hasattr(obj, key)]
-#     values = [getattr(obj, key) for key in keys]
     
-#     # Correctly handling the column names for SQL
-#     column_names = ', '.join(keys)
-#     placeholders = ', '.join(['%s'] * len(values))
-    
-#     # Constructing the INSERT statement
-#     insert_query = f"""INSERT INTO {obj.__table__} ({column_names}) VALUES ({placeholders}) RETURNING id;"""
-    
-#     # Executing the INSERT statement and getting the newly created id
-#     cursor.execute(insert_query, values)
-#     new_id = cursor.fetchone()[0]  # Assuming 'id' is the first column in the RETURNING clause
-#     conn.commit()
-    
-#     # Fetching the newly inserted record by its id
-#     cursor.execute(f"""SELECT * FROM {obj.__table__} WHERE id = %s;""", (new_id,))
-#     record = cursor.fetchone()
-    
-#     # convert the record back into a Company object
-#     return build_from_record(type(obj), record)
-
+    return build_from_record(type(obj), record)  # Convert the record back into an object of the same type
 
 
 def values(obj):
@@ -238,3 +199,60 @@ def find_or_build_by_name(Class, name, cursor):
         obj.name = name
     return obj
 
+
+# FIXME: toggling save method for SQLite and PostgreSQL. need to migrate to SQLalchemy ORM
+
+# def find(Class, id, cursor):                                          # find() was written for postgres
+#     sql_str = f"SELECT * FROM {Class.__table__} WHERE id = %s"        # postgres %s convention for parameterized queries
+#     cursor.execute(sql_str, (id,))
+#     record = cursor.fetchone()
+#     return build_from_record(Class, record)
+
+
+###   original save method for postgres
+# def save(obj, conn, cursor):
+#     s_str = ', '.join(len(values(obj)) * ['%s'])
+#     obj_str = f"""INSERT INTO {obj.__table__} ({keys(obj)}) VALUES ({s_str});"""
+#     cursor.execute(obj_str, list(values(obj)))
+#     conn.commit()
+#     cursor.execute(f'SELECT * FROM {obj.__table__} ORDER BY id DESC LIMIT 1')
+#     record = cursor.fetchone()
+#     return build_from_record(type(obj), record)
+
+
+# ###  SQLITE SAVE METHOD
+# def save(obj, conn, cursor):
+#     s_str = ', '.join(len(values(obj)) * ['?'])  # Changed from '%s' to '?'
+#     obj_str = f"""INSERT INTO {obj.__table__} ({keys(obj)}) VALUES ({s_str});"""
+#     cursor.execute(obj_str, list(values(obj)))
+#     conn.commit()
+#     last_id = cursor.lastrowid  # Get the last inserted id for SQLite
+#     cursor.execute(f"SELECT * FROM {obj.__table__} WHERE id = ?", (last_id,))  # Changed from '%s' to '?'
+#     record = cursor.fetchone()
+#     return build_from_record(type(obj), record)
+
+
+# ###  POSTGRES SAVE METHOD
+# def save(obj, conn, cursor):
+#     # Extracting keys (column names) and values from the object
+#     keys = [key for key in obj.columns if hasattr(obj, key)]
+#     values = [getattr(obj, key) for key in keys]
+    
+#     # Correctly handling the column names for SQL
+#     column_names = ', '.join(keys)
+#     placeholders = ', '.join(['%s'] * len(values))
+    
+#     # Constructing the INSERT statement
+#     insert_query = f"""INSERT INTO {obj.__table__} ({column_names}) VALUES ({placeholders}) RETURNING id;"""
+    
+#     # Executing the INSERT statement and getting the newly created id
+#     cursor.execute(insert_query, values)
+#     new_id = cursor.fetchone()[0]  # Assuming 'id' is the first column in the RETURNING clause
+#     conn.commit()
+    
+#     # Fetching the newly inserted record by its id
+#     cursor.execute(f"""SELECT * FROM {obj.__table__} WHERE id = %s;""", (new_id,))
+#     record = cursor.fetchone()
+    
+#     # convert the record back into a Company object
+#     return build_from_record(type(obj), record)
