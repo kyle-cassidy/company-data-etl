@@ -3,7 +3,7 @@ from flask import g
 # from backend.secrets.settings import DB_USER, DB_NAME, DB_HOST, DB_PASSWORD, DEBUG, TESTING #TODO: check config imports
 from config import Config, DevelopmentConfig, TestingConfig, ProductionConfig, TestingSQLiteConfig
 from secrets_manager.settings import DB_USER, DB_NAME, DB_HOST, DB_PASSWORD, DEBUG, TESTING
-
+import sqlite3
 import psycopg2
 from psycopg2 import connect
 from psycopg2.extensions import make_dsn
@@ -15,23 +15,6 @@ conn = psycopg2.connect(
     user=DB_USER,
     password=DB_PASSWORD
 )
-
-
-import sqlite3
-
-def create_tables_from_sql_file(db_path, sql_file_path):
-
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
-
-    with open(sql_file_path, 'r') as sql_file:
-        sql_script = sql_file.read()
-
-    cursor.executescript(sql_script)
-
-    conn.commit()
-    conn.close()
-
 
 def get_db():
     with current_app.app_context():
