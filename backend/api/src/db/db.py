@@ -1,7 +1,7 @@
 from flask import current_app
 from flask import g
 # from backend.secrets.settings import DB_USER, DB_NAME, DB_HOST, DB_PASSWORD, DEBUG, TESTING #TODO: check config imports
-from config import Config, DevelopmentConfig, TestingConfig, ProductionConfig
+from config import Config, DevelopmentConfig, TestingConfig, ProductionConfig, TestingSQLiteConfig
 from secrets_manager.settings import DB_USER, DB_NAME, DB_HOST, DB_PASSWORD, DEBUG, TESTING
 
 import psycopg2
@@ -16,17 +16,19 @@ conn = psycopg2.connect(
     password=DB_PASSWORD
 )
 
-# dsn = make_dsn(
-#     host=current_config.DB_HOST, 
-#     dbname=current_config.DB_NAME,
-#     user=current_config.DB_USER,
-#     password=current_config.DB_PASSWORD
-# )
+def get_db():
+    with current_app.app_context():
+        if "db" not in g:
+            if isinstance(current_config, TestingSQLiteConfig):
+                g.db = connect(current_config.DB_URI, uri=True)
+            else:
+                g.db = psycopg2.connect(
+                    host=current_config.DB_HOST,
+                    user=current_config.DB_USER,
+                    password=current_config.DB_PASSWORD,
+                    dbname=current_config.DB_NAME)
+        return g.db
 
-# conn = connect(dsn)
-
-
-#TODO: build main db connection
 
 # conn = psycopg2.connect(
 #     host = Config.DB_HOST, 
@@ -47,15 +49,15 @@ conn = psycopg2.connect(
 
 # test_cursor = test_conn.cursor()
 
-def get_db():
-    with current_app.app_context():
-        if "db" not in g:
-            g.db = psycopg2.connect(
-                host=current_config.DB_HOST,
-                user=current_config.DB_USER,
-                password=current_config.DB_PASSWORD,
-                dbname=current_config.DB_NAME)
-        return g.db
+# def get_db():
+#     with current_app.app_context():
+#         if "db" not in g:
+#             g.db = psycopg2.connect(
+#                 host=current_config.DB_HOST,
+#                 user=current_config.DB_USER,
+#                 password=current_config.DB_PASSWORD,
+#                 dbname=current_config.DB_NAME)
+#         return g.db
 
 # def get_db():
 #     if "db" not in g:

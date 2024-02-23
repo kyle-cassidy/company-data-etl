@@ -24,6 +24,9 @@ class ProductionConfig(Config):
     DB_NAME = os.getenv('PROD_DB_NAME')
     DB_USER = os.getenv('PROD_DB_USER')
     DB_PASSWORD = os.getenv('PROD_DB_PASSWORD')
+    
+class TestingSQLiteConfig(Config):
+    DB_URI = 'sqlite:///sp500_test_db.sqlite'
 
 # Initialize a global variable to hold the current configuration
 current_config = None
@@ -40,6 +43,9 @@ def set_config():
     elif env == 'production':
         print('ProductionConfig')
         current_config = ProductionConfig
+    elif env == 'testing_sqlite':
+        print('TestingSQLiteConfig')
+        current_config = TestingSQLiteConfig
     else:
         raise ValueError(f"Unknown FLASK_ENV: {env}")
 
