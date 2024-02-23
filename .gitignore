@@ -7,7 +7,7 @@ secrets/
 .vscode/
 documentation
 tasks/
-
+backend/api/data/seed/sp500
 backend/api/data/seed-SEC-EDGAR/
 # backend/api/data/seed-sp500/
 backend/api/data/seed/
