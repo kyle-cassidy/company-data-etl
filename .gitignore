@@ -26,7 +26,8 @@ backend/api/src/utils/temp
 config copy.py
 config.md
 backend/api/src/utils/temp/
-
+backend/api/data/seed-sp500/sp500_stocks/.2010-2019
+backend/api/data/sp500_p1.sqlite
 
 
 
