@@ -10,6 +10,8 @@ tasks/
 backend/api/data/seed-SEC-EDGAR/
 # backend/api/data/seed-sp500/
 backend/api/data/seed/
+backend/api/data/seed/sp500/sp500_stocks.csv
+/Users/kielay/Developer/projects/company-data-etl/backend/api/data/seed/sp500/sp500_stocks.csv
 .DS_Store
 secrets_manager/
 ../.python-version
