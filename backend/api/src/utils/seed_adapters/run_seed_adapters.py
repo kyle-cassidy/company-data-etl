@@ -2,9 +2,9 @@
 from ...db.db import get_db, conn, save, find_or_create_by_name
 from ...utils.seed_adapters.seed_adapters import SP500Seeder
 
-sp500_companies = '/backend/api/data/seed/sp500/sp500_companies.csv'
-sp500_stocks = '/backend/api/data/seed/sp500/sp500_stocks.csv'
-sp500_index = '/backend/api/data/seed/sp500/sp500_index.csv'
+sp500_companies = 'backend/api/data/seed-sp500/sp500_companies'
+sp500_stocks = 'backend/api/data/seed-sp500/sp500_stocks'
+sp500_index = 'backend/api/data/seed-sp500/sp500_index'
 
 def seed_sp500_data(conn=conn):
     if conn is None:
