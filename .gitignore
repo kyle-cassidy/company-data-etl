@@ -7,12 +7,26 @@ secrets/
 .vscode/
 documentation
 tasks/
+
+backend/api/data/seed-SEC-EDGAR/
+# backend/api/data/seed-sp500/
+backend/api/data/seed/
+backend/api/data/seed/sp500/sp500_stocks.csv
+/Users/kielay/Developer/projects/company-data-etl/backend/api/data/seed/sp500/sp500_stocks.csv
 backend/api/data/seed
+
 .DS_Store
 secrets_manager/
 ../.python-version
 config.md
 analysis/
+
+backend/api/src/utils/etl_adapters
+backend/api/src/utils/temp
+config copy.py
+config.md
+backend/api/src/utils/temp/
+
 
 
 
