@@ -1,28 +1,18 @@
 
-import numpy as np
-import pandas as pd 
+# import numpy as np
+# import pandas as pd 
 
 
-import matplotlib.pyplot as plt
-import seaborn as sns
-from sklearn.metrics import mean_squared_error
+# import matplotlib.pyplot as plt
+# import seaborn as sns
+# from sklearn.metrics import mean_squared_error
 
-from api.src.clients.fmp_client import FMPClient
-from api.src.utils.seed_adapters.run_seed_adapters import seed_sp500_data
-from config import current_config
-import psycopg2
-from api.src import create_app 
-
-from flask import current_app, g
-from api.src.db import (
-    get_db, close_db, save, build_from_record, build_from_records,
-    find, find_all, values, keys, drop_tables, drop_records,
-    find_or_create_by_name, find_or_build_by_name
-)
+# # from api.src.clients.fmp_client import FMPClient
+# from api.src.utils.seed_adapters.run_seed_adapters import seed_sp500_data
+# import api.src.models.phase_1 as models
 
 
-
-client = FMPClient()
+# client = FMPClient()
 
 # testing daily API requests 
 # print(client.request_company_profile('AAPL'))
@@ -42,6 +32,12 @@ client = FMPClient()
 # app = create_app()
 # app.run(debug = True, host = '0.0.0.0')
 
-from api.src.utils.seed_adapters.run_seed_adapters import seed_sp500_data
 
-# seed_sp500_data()
+import sqlite3
+
+try:
+    conn = sqlite3.connect('api/data/sp500_p1.sqlite')
+    print("Connected to the database successfully")
+    conn.close()
+except sqlite3.OperationalError as e:
+    print(f"Error: {e}")

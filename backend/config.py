@@ -26,14 +26,17 @@ class ProductionConfig(Config):
     DB_PASSWORD = os.getenv('PROD_DB_PASSWORD')
     
 class TestingSQLiteConfig(Config):
-    DB_URI = 'sqlite:///sp500_test_db.sqlite'
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    DB_FILE = os.path.join(BASE_DIR, 'api', 'data', 'sp500_p1.sqlite')
+    DB_URI = f'sqlite:///{DB_FILE}'
 
 # Initialize a global variable to hold the current configuration
 current_config = None
 
 def set_config():
     global current_config
-    env = os.getenv('FLASK_ENV', 'testing').lower()
+    env = os.getenv('FLASK_ENV', 'testing_sqlite').lower()
+    print(f"FLASK_ENV is set to: {env}")
     if env == 'development':
         print('DevelopmentConfig')
         current_config = DevelopmentConfig

@@ -1,14 +1,23 @@
-# from backend.api.src.db.db import get_db
-from ...db.db import get_db, conn, save, find_or_create_by_name
+import os
+from ...db.db import get_db, save, find_or_create_by_name
 from ...utils.seed_adapters.seed_adapters import SP500Seeder
 
+# sp500_companies = 'backend/api/data/seed-sp500/sp500_companies'
+# sp500_stocks = 'backend/api/data/seed-sp500/sp500_stocks'
+# sp500_index = 'backend/api/data/seed-sp500/sp500_index'
 
-sp500_companies = 'backend/api/data/seed-sp500/sp500_companies'
-sp500_stocks = 'backend/api/data/seed-sp500/sp500_stocks'
-sp500_index = 'backend/api/data/seed-sp500/sp500_index'
+# sp500_p1_sqlite = 'backend/api/data/sp500_p1.sqlite'
+
+# Define the path to the database file relative to the project root
+sp500_p1_sqlite = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'data', 'sp500_p1.sqlite')
+
+# Define the paths to the CSV directories relative to the project root
+sp500_companies = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'data', 'seed-sp500', 'sp500_companies')
+sp500_stocks = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'data', 'seed-sp500', 'sp500_stocks')
+sp500_index = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'data', 'seed-sp500', 'sp500_index')
 
 
-def seed_sp500_data(conn=conn):
+def seed_sp500_postgres(conn=None):
     if conn is None:
         conn = get_db()
     # conn = get_db()
@@ -17,12 +26,18 @@ def seed_sp500_data(conn=conn):
     seeder.seed_companies(sp500_companies)
     seeder.seed_stocks(sp500_stocks)
 
-    # seeder.seed_companies(sp500_companies)
-    # seeder.seed_stocks(sp500_stocks)
-
     seeder.seed_index(sp500_index)  
     seeder.close()
 
+def seed_sp500_sqlite(conn=None, db_path=sp500_p1_sqlite):
+    conn = get_db(db_path) 
+    seeder = SP500Seeder(conn)
+
+    seeder.seed_companies(sp500_companies)
+    seeder.seed_stocks(sp500_stocks)
+    seeder.seed_index(sp500_index)
+
+    seeder.close()
 
 
 

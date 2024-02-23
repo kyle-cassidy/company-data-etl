@@ -1,33 +1,63 @@
-from flask import current_app
-from flask import g
-# from backend.secrets.settings import DB_USER, DB_NAME, DB_HOST, DB_PASSWORD, DEBUG, TESTING #TODO: check config imports
-from config import Config, DevelopmentConfig, TestingConfig, ProductionConfig, TestingSQLiteConfig
-from secrets_manager.settings import DB_USER, DB_NAME, DB_HOST, DB_PASSWORD, DEBUG, TESTING
+from flask import Flask, current_app, g
+from config_sqlite import current_config, TestingSQLiteConfig
+# from config_postgres import current_config, TestingConfig, DevelopmentConfig, ProductionConfig
+# from secrets_manager.settings import DB_USER, DB_NAME, DB_HOST, DB_PASSWORD, DEBUG, TESTING
 import sqlite3
 import psycopg2
-from psycopg2 import connect
-from psycopg2.extensions import make_dsn
-from config import current_config
 
-conn = psycopg2.connect(
-    host=DB_HOST,
-    database=DB_NAME,
-    user=DB_USER,
-    password=DB_PASSWORD
-)
+# conn = psycopg2.connect(
+#     host=DB_HOST,
+#     database=DB_NAME,
+#     user=DB_USER,
+#     password=DB_PASSWORD
+# )
+
+# sqlite_conn = sqlite3.connect('sqlite:///sp500_test_db.sqlite', uri=True)
 
 def get_db():
-    with current_app.app_context():
-        if "db" not in g:
-            if isinstance(current_config, TestingSQLiteConfig):
-                g.db = connect(current_config.DB_URI, uri=True)
-            else:
-                g.db = psycopg2.connect(
-                    host=current_config.DB_HOST,
-                    user=current_config.DB_USER,
-                    password=current_config.DB_PASSWORD,
-                    dbname=current_config.DB_NAME)
-        return g.db
+    if 'db' not in g:
+        print(f"Current config type: {type(current_config)}")
+        print(f"Is instance of TestingSQLiteConfig: {isinstance(current_config, TestingSQLiteConfig)}")
+        print(f"Connecting to database at: {current_app.config['DB_URI']}")
+        # Check if the current configuration is for testing with SQLite
+        if isinstance(current_config, TestingSQLiteConfig):
+            print("Connecting to SSSSSSQLite database")
+            # Connect to the SQLite database for testing
+            g.db = sqlite3.connect(current_config.DB_FILE)
+            g.db.row_factory = sqlite3.Row
+        else:
+            print("Connecting to PostgreSQL database")
+            # Connect to the PostgreSQL database
+            g.db = psycopg2.connect(
+                host=current_config.DB_HOST,
+                database=current_config.DB_NAME,
+                user=current_config.DB_USER,
+                password=current_config.DB_PASSWORD
+            )
+    return g.db
+
+# def get_db(db_path=None):
+#     if current_app:
+#         app_context = current_app.app_context()
+#     else:
+#         app = Flask(__name__)
+#         app.config.from_object(current_config)      # config.py: configuration set up in the current_config object
+#         app_context = app.app_context()
+#         app_context.push()                          # Manually push an application context
+
+#     with app_context:
+#         if "db" not in g:
+#             if db_path or isinstance(current_config, TestingSQLiteConfig):
+#                 # Connect to SQLite database
+#                 g.db = sqlite3.connect(db_path or current_config.DB_URI, uri=True)
+#             else:
+#                 # PostgreSQL connection
+#                 g.db = psycopg2.connect(
+#                     host=current_config.DB_HOST,
+#                     user=current_config.DB_USER,
+#                     password=current_config.DB_PASSWORD,
+#                     dbname=current_config.DB_NAME)
+#         return g.db
 
 
 # conn = psycopg2.connect(
@@ -90,12 +120,32 @@ def find_all(Class, cursor):
     records = cursor.fetchall()
     return [build_from_record(Class, record) for record in records]
 
+
+
+# def find(Class, id, cursor):                                          # find() was written for postgres
+#     sql_str = f"SELECT * FROM {Class.__table__} WHERE id = %s"        # postgres %s convention for parameterized queries
+#     cursor.execute(sql_str, (id,))
+#     record = cursor.fetchone()
+#     return build_from_record(Class, record)
+
+
+# updated find() method for SQLite should also work for PostgreSQL. # TODO: test this method with PostgreSQL
 def find(Class, id, cursor):
-    sql_str = f"SELECT * FROM {Class.__table__} WHERE id = %s"
-    cursor.execute(sql_str, (id,))
+    sql_str = f"SELECT * FROM {Class.__table__} WHERE id = :id"
+    cursor.execute(sql_str, {'id': id})
     record = cursor.fetchone()
     return build_from_record(Class, record)
 
+def find_by_symbol(Class, symbol, cursor):
+    sql_str = f"SELECT * FROM {Class.__table__} WHERE symbol = :symbol"
+    cursor.execute(sql_str, {'symbol': symbol})
+    record = cursor.fetchone()
+    return build_from_record(Class, record)
+
+
+# FIXME: toggling save method for SQLite and PostgreSQL. need to migrate to SQLalchemy ORM
+
+###   original save method
 # def save(obj, conn, cursor):
 #     s_str = ', '.join(len(values(obj)) * ['%s'])
 #     obj_str = f"""INSERT INTO {obj.__table__} ({keys(obj)}) VALUES ({s_str});"""
@@ -105,54 +155,43 @@ def find(Class, id, cursor):
 #     record = cursor.fetchone()
 #     return build_from_record(type(obj), record)
 
-# alternate save method
-# def save(obj, conn, cursor):
-#     s_str = ', '.join(len(values(obj)) * ['%s'])
-#     obj_str = f"""INSERT INTO {obj.__table__} ({keys(obj)}) VALUES ({s_str}) RETURNING {obj.columns[0]};""" #In this modification, the `INSERT` statement now includes a `RETURNING` clause that returns the value of the primary key column immediately after insertion. The `find` function is then used to retrieve the full record using the returned primary key value.}
-#     cursor.execute(obj_str, list(values(obj)))
-#     primary_key_value = cursor.fetchone()[0]
-#     conn.commit()
-#     return find(obj.__class__, primary_key_value, cursor)
 
-# def save(obj, conn, cursor):
-#     # Exclude the 'id' attribute if it exists since it's auto-generated
-#     attr_to_save = {k: v for k, v in obj.__dict__.items() if k != 'id'}
-    
-#     # Construct the INSERT statement without the 'id'
-#     columns_str = ', '.join(attr_to_save.keys())
-#     values_str = ', '.join(['%s'] * len(attr_to_save))
-    
-#     # Create the SQL statement with RETURNING clause for 'id'
-#     sql_str = f"INSERT INTO {obj.__table__} ({columns_str}) VALUES ({values_str}) RETURNING id;"
-    
-#     # Execute the statement and commit the changes
-#     cursor.execute(sql_str, list(attr_to_save.values()))
-#     obj_id = cursor.fetchone()[0] # Fetch the generated id
-#     conn.commit()
-
+###  SQLITE SAVE METHOD
 def save(obj, conn, cursor):
-    # Extracting keys (column names) and values from the object
-    keys = [key for key in obj.columns if hasattr(obj, key)]
-    values = [getattr(obj, key) for key in keys]
-    
-    # Correctly handling the column names for SQL
-    column_names = ', '.join(keys)
-    placeholders = ', '.join(['%s'] * len(values))
-    
-    # Constructing the INSERT statement
-    insert_query = f"""INSERT INTO {obj.__table__} ({column_names}) VALUES ({placeholders}) RETURNING id;"""
-    
-    # Executing the INSERT statement and getting the newly created id
-    cursor.execute(insert_query, values)
-    new_id = cursor.fetchone()[0]  # Assuming 'id' is the first column in the RETURNING clause
+    s_str = ', '.join(len(values(obj)) * ['?'])  # Changed from '%s' to '?'
+    obj_str = f"""INSERT INTO {obj.__table__} ({keys(obj)}) VALUES ({s_str});"""
+    cursor.execute(obj_str, list(values(obj)))
     conn.commit()
-    
-    # Fetching the newly inserted record by its id
-    cursor.execute(f"""SELECT * FROM {obj.__table__} WHERE id = %s;""", (new_id,))
+    last_id = cursor.lastrowid  # Get the last inserted id for SQLite
+    cursor.execute(f"SELECT * FROM {obj.__table__} WHERE id = ?", (last_id,))  # Changed from '%s' to '?'
     record = cursor.fetchone()
-    
-    # convert the record back into a Company object
     return build_from_record(type(obj), record)
+
+
+# ###  POSTGRES SAVE METHOD
+# def save(obj, conn, cursor):
+#     # Extracting keys (column names) and values from the object
+#     keys = [key for key in obj.columns if hasattr(obj, key)]
+#     values = [getattr(obj, key) for key in keys]
+    
+#     # Correctly handling the column names for SQL
+#     column_names = ', '.join(keys)
+#     placeholders = ', '.join(['%s'] * len(values))
+    
+#     # Constructing the INSERT statement
+#     insert_query = f"""INSERT INTO {obj.__table__} ({column_names}) VALUES ({placeholders}) RETURNING id;"""
+    
+#     # Executing the INSERT statement and getting the newly created id
+#     cursor.execute(insert_query, values)
+#     new_id = cursor.fetchone()[0]  # Assuming 'id' is the first column in the RETURNING clause
+#     conn.commit()
+    
+#     # Fetching the newly inserted record by its id
+#     cursor.execute(f"""SELECT * FROM {obj.__table__} WHERE id = %s;""", (new_id,))
+#     record = cursor.fetchone()
+    
+#     # convert the record back into a Company object
+#     return build_from_record(type(obj), record)
 
 
 
