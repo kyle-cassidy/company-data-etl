@@ -10,10 +10,7 @@ class SP500Seeder:
     def __init__(self, db_connection):
         self.conn = db_connection
         self.cursor = self.conn.cursor()
-
-    
-    # csv rows: Exchange,Symbol,Shortname,Longname,Sector,Industry,Currentprice,Marketcap,Ebitda,Revenuegrowth,City,State,Country,Fulltimeemployees,Longbusinesssummary,Weight
-    # model columns: columns = ['exchange', 'symbol', 'short_name', 'long_name', 'sector', 'industry', 'current_price', 'market_cap', 'ebitda', 'revenue_growth', 'city', 'state', 'country', 'fulltime_employees', 'long_business_summary', 'weight']
+   
     
     def seed_companies(self, companies_csv_directory):
         
@@ -79,5 +76,17 @@ class SP500Seeder:
     def close(self):
         self.cursor.close()
         self.conn.close()
-        
-    
+
+
+
+#------------------------------------------------------------------------------------------------------------------------#
+# data selction notes:
+ # companies
+    # sp500_companies.csv rows: Exchange,Symbol,Shortname,Longname,Sector,Industry,Currentprice,Marketcap,Ebitda,Revenuegrowth,City,State,Country,Fulltimeemployees,Longbusinesssummary,Weight
+    # SPCompany model columns: columns = ['exchange', 'symbol', 'short_name', 'long_name', 'sector', 'industry', 'current_price', 'market_cap', 'ebitda', 'revenue_growth', 'city', 'state', 'country', 'fulltime_employees', 'long_business_summary', 'weight']
+# stocks
+    # sp500_stocks.csv rows: Date,Symbol,Adj Close,Close,High,Low,Open,Volume
+    # SPStock model columns: columns = ['date', 'symbol', 'adj_close', 'close', 'high', 'low', 'open', 'volume']
+# index
+    # sp500_index.csv rows: Date,IndexLevel,IndexName
+    # SPIndexLevel model columns: columns = ['date', 'index_level', 'index_name']    
