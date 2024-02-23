@@ -1,4 +1,5 @@
 import os
+import sqlite3
 from ...db.db import get_db, save, find_or_create_by_name
 from ...utils.seed_adapters.seed_adapters import SP500Seeder
 
@@ -9,7 +10,7 @@ from ...utils.seed_adapters.seed_adapters import SP500Seeder
 # sp500_p1_sqlite = 'backend/api/data/sp500_p1.sqlite'
 
 # Define the path to the database file relative to the project root
-sp500_p1_sqlite = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'data', 'sp500_p1.sqlite')
+sp500_p1_sqlite = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'data', 'sp500_p1_sm.sqlite')
 
 # Define the paths to the CSV directories relative to the project root
 sp500_companies = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'data', 'seed-sp500', 'sp500_companies')
@@ -30,7 +31,7 @@ def seed_sp500_postgres(conn=None):
     seeder.close()
 
 def seed_sp500_sqlite(conn=None, db_path=sp500_p1_sqlite):
-    conn = get_db(db_path) 
+    conn = sqlite3.connect(db_path, uri=True)
     seeder = SP500Seeder(conn)
 
     seeder.seed_companies(sp500_companies)

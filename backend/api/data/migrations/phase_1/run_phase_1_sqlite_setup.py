@@ -1,6 +1,11 @@
 import sqlite3
+import os
 
-def create_tables_from_sql_file(db_path, sql_file_path):
+# Define the path to the and create_tables & database files relative to the project root
+db_path = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'data', 'sp500_p1_sm.sqlite')
+sql_file_path = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'data', 'migrations', 'phase_1', 'create_tables_phase_1_lite.sql')
+
+def create_tables_from_sql_file(db_path=db_path, sql_file_path=sql_file_path):
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     with open(sql_file_path, 'r') as sql_file:
@@ -9,7 +14,8 @@ def create_tables_from_sql_file(db_path, sql_file_path):
     conn.commit()
     conn.close()
 
-if __name__ == "__main__":
-    db_path = 'backend/api/data/sp500_p1.sqlite'
-    sql_file_path = 'backend/api/data/migrations/phase_1/create_tables_phase_1_lite.sql'
-    create_tables_from_sql_file(db_path, sql_file_path)
+# moved to seed_db.py
+# if __name__ == "__main__":
+#     db_path = 'backend/api/data/sp500_p1_sm.sqlite'
+#     sql_file_path = 'backend/api/data/migrations/phase_1/create_tables_phase_1_lite.sql'
+#     create_tables_from_sql_file(db_path, sql_file_path)

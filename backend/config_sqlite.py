@@ -18,7 +18,7 @@ class ProductionConfig(Config):
 
 class TestingSQLiteConfig(Config):
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    DB_FILE = os.path.join(BASE_DIR, 'api', 'data', 'sp500_p1.sqlite')
+    DB_FILE = os.path.join(BASE_DIR, 'api', 'data', 'sp500_p1_sm.sqlite')
     DB_URI = f'sqlite:///{DB_FILE}'
 
 def get_config():
