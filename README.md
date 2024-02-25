@@ -38,7 +38,7 @@ there is potential to further develop the application to include unstructured da
    
 2. Run the Streamlit dashboard app. in your prefered terminal or command prompt, navigate to the root of the project and run the following command:
    ```sh
-   streamlit run backend/app_st.py
+   streamlit run app_st.py
    ```
 3. Run the Flask application:
    ```sh
