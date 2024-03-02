@@ -3,10 +3,11 @@ requests
 pandas
 psycopg2-binary
 flask
+flask-sqlalchemy
+sqlalchemy
 streamlit
-pytest
 matplotlib 
 seaborn 
 scikit-learn
-sqlalchemy
 simplejson
+pytest
