@@ -1,9 +1,0 @@
-
-In [27]: stock_list[0]
-Out[27]:
-{'symbol': 'PMGOLD.AX',
- 'name': 'Perth Mint Gold',
- 'price': 17.94,
- 'exchange': 'Australian Securities Exchange',
- 'exchangeShortName': 'ASX',
- 'type': 'etf'}

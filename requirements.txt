@@ -11,3 +11,4 @@ seaborn
 scikit-learn
 simplejson
 pytest
+flask_sqlalchemy
