@@ -18,9 +18,16 @@ Ensure you have the following installed:
    ```sh
    git clone https://github.com/kyle-cassidy/company-data-etl
    ```
-2. Navigate to the project directory and Install the required dependencies:
+2. Navigate to the project directory
    ```sh
    python3 -m venv venv
+   ```
+3. Activate env
+   ```sh
+   source venv/bin/activate
+   ```
+5. Install the required dependencies
+   ```
    pip3 install -r requirements.txt
    ```
    * note: if you would like to use jupyter notebook to run interactive cells, you will need to install the jupyter notebook package in your venv as well. to do so, run the following command in your terminal or command prompt:
