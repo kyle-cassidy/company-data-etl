@@ -32,7 +32,7 @@ Ensure you have the following installed:
    ```
    * note: if you would like to use jupyter notebook to run interactive cells, you will need to install the jupyter notebook package in your venv as well. to do so, run the following command in your terminal or command prompt:
    
-   `pip3 install jupyter``
+   `pip3 install jupyter`
 
 ## The Application
 the application is designed to extract, process, and analyze data related to public companies from both structured and unstructured sources. currently it collects, transforms, translates structured data and  provides insights through calculated financial ratios, sentiment analysis, and trend identification, culminating in a summary via streamlit.
