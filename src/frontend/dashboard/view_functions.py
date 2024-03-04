@@ -6,7 +6,7 @@ import os
 
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-
+OPENAI_API_KEY=str(OPENAI_API_KEY)
 os.environ['OPENAI_API_KEY'] =OPENAI_API_KEY
 
 # Get the absolute path of the current file's directory
