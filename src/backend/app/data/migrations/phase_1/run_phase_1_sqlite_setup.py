@@ -2,7 +2,7 @@ import sqlite3
 import os
 
 # Define the path to the and create_tables & database files relative to the project root
-db_path = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'data', 'sp500_p1_sm.sqlite')
+db_path = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'data', 'sp500_p1_sm.sqlite') #FIXME: need to update migration paths to match new project structure
 sql_file_path = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'data', 'migrations', 'phase_1', 'create_tables_phase_1_lite.sql')
 
 def create_tables_from_sql_file(db_path=db_path, sql_file_path=sql_file_path):

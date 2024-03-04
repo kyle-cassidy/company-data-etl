@@ -1,5 +1,5 @@
 from flask import jsonify
-# import backend.app.models.phase_1 as models
+import app.models.phase_1 as models
 from app import create_app, db
 
 import os
@@ -13,27 +13,20 @@ def index():
 # returns all companies
 @app.route('/companies')
 def companies():
-    conn = db.get_db()
-    cursor = conn.cursor()
-
-    companies = db.find_all(models.SPCompany, cursor)
-    company_dicts = [company.__dict__ for company in companies]
-    return json.dumps(company_dicts, default = str)
+    companies = db.session.query(models.SPCompany).all()
+    companies_dict = [company.to_dict() for company in companies]
+    return jsonify(companies_dict)
     
 # returns a single company by id
-@app.route('/companies/<id>')
+@app.route('/companies/<int:id>')
 def company_id(id):
-    conn = db.get_db()
-    cursor = conn.cursor()
-    company = db.find(models.SPCompany, id, cursor)
-    
-    return json.dumps(company.__dict__, default = str)
+    company = db.session.query(models.SPCompany).get(id)
+    company_dict = company.to_dict()
+    return jsonify(company_dict)
     
 # return a company by symbol
-@app.route('/companies/symbol/<symbol>')
+@app.route('/companies/symbol/<string:symbol>')
 def company_symbol(symbol):
-    conn = db.get_db()
-    cursor = conn.cursor()
-    
-    company = db.find_by_symbol(models.SPCompany, symbol, cursor)  
-    return json.dumps(company.__dict__, default = str)    
+    company = db.session.query(models.SPCompany).filter(models.SPCompany.symbol == symbol).first()
+    company_dict = company.to_dict()    
+    return jsonify(company_dict)
