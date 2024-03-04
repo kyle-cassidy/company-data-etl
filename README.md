@@ -53,7 +53,11 @@ alternatively, you can run the backend and frontend separately:
    ```sh
    python3 run_backend.py
    ```
-2. Run the Streamlit application:
+2. Set your OPENAI_API_KEY environment variable in .env (located at the root level) or
+   Run the following command in your terminal, replacing yourkey with your API key. 
+   - on a mac: `echo "export OPENAI_API_KEY='yourkey'" >> ~/.zshrc`
+   - windows: `setx OPENAI_API_KEY "<enter-your-key-here>" 
+3. Run the Streamlit application:
    ```sh
    python3 run_frontend.py
    ```
