@@ -1,23 +1,34 @@
 from llama_index.core.indices.loading import load_index_from_storage
 from llama_index.core.storage.storage_context import StorageContext
-import os
 from dotenv import load_dotenv
+import pathlib
+import os
 
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 os.environ['OPENAI_API_KEY'] =OPENAI_API_KEY
 
+# Get the absolute path of the current file's directory
+current_file_dir = pathlib.Path(__file__).parent.absolute()
+# Construct the path to the storage directory relative to the current file's location
+storage_dir = current_file_dir.joinpath('../storage')
+
 def load_from_db():
-    storage_context = StorageContext.from_defaults(persist_dir="../storage")
+    storage_context = StorageContext.from_defaults(persist_dir=str(storage_dir))
     index = load_index_from_storage(storage_context)
     return index
-
+    
+    
 def set_title(st):
-    st.set_page_config(page_title="Uber and Lyft 10k Chatbot",
-     layout="centered",
-     initial_sidebar_state="auto", menu_items=None)
-    st.title("Chat with the Uber or Lyft docs")
+    st.set_page_config(
+        page_title="Public Company Insights: chatbot", 
+        page_icon="📈",
+        layout="centered",
+        initial_sidebar_state="auto", 
+        menu_items=None
+        )
+    st.title("Public Company Insights: chatbot")
 
 def display_message_history(st):
     for message in st.session_state.messages:

@@ -4,9 +4,15 @@ class SPIndexLevel(db.Model):
     __tablename__ = 'sp_500_index_levels'
     # columns = ['id','date','index_level', 'index_name']
     id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.Date, nullable=False)
+    date = db.Column(db.String(10), nullable=False) #FIXME - change to date. ERROR: ValueError: Invalid isoformat string: '2/18/14'
     index_level = db.Column(db.Float, nullable=False)
     index_name = db.Column(db.String(50), nullable=False)
+    
+    def to_dict(self):
+        dict_ = {}
+        for key in self.__mapper__.c.keys():
+            dict_[key] = getattr(self, key)
+        return dict_
 
 
 

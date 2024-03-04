@@ -31,6 +31,13 @@ def company_symbol(symbol):
     company_dict = company.to_dict()    
     return jsonify(company_dict)
 
+# return all stocks
+@app.route('/stocks')
+def stocks():
+    stocks = db.session.query(models.SPStock).all()
+    stocks_dict = [stock.to_dict() for stock in stocks]
+    return jsonify(stocks_dict)
+
 # return all stocks by company symbol
 @app.route('/stocks/symbol/<string:symbol>')
 def stocks_symbol(symbol):
@@ -42,5 +49,10 @@ def stocks_symbol(symbol):
     breakpoint()
     return stocks_json
 
-
+# return all Index Levels
+@app.route('/index_levels') 
+def index_levels():
+    index_levels = db.session.query(models.SPIndexLevel).all()
+    index_levels_dict = [index_level.to_dict() for index_level in index_levels]
+    return jsonify(index_levels_dict)
 
