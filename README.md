@@ -42,9 +42,9 @@ the application is designed to extract, process, and analyze data related to pub
 ### Set your OpenAI API KEY
 
 Set your OPENAI_API_KEY environment variable in .env (located at the root level) or
-Run the following command in your terminal, replacing yourkey with your API key.
+Run the following command in your terminal, replacing <enter-your-key-here> with your API key.
 Detailed instructions can be found here: https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety
-- on a mac: `echo "export OPENAI_API_KEY='yourkey'" >> ~/.zshrc`
+- on a mac: `echo "export OPENAI_API_KEY=<enter-your-key-here>" >> ~/.zshrc`
 - windows: `setx OPENAI_API_KEY "<enter-your-key-here>" 
 
 ### Running the Application
