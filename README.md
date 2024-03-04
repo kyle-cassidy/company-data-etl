@@ -39,29 +39,37 @@ the application is designed to extract, process, and analyze data related to pub
 
 *update*: a demonstration chatbot is live on the streamlit dashboard. it is a simple chatbot that can answer questions about uber and lyft 10-k financial documents. it is designed to be a simple demonstration of the potential for a chatbot to provide insights and answer questions about unstructured data.
 
+### Set your OpenAI API KEY
+
+Set your OPENAI_API_KEY environment variable in .env (located at the root level) or
+Run the following command in your terminal, replacing yourkey with your API key.
+Detailed instructions can be found here: https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety
+- on a mac: `echo "export OPENAI_API_KEY='yourkey'" >> ~/.zshrc`
+- windows: `setx OPENAI_API_KEY "<enter-your-key-here>" 
+
 ### Running the Application
 
 1. Notebook analysis can be found in the `analysis_sqlite.ipynb` notebook at the root of the project.
    
 2. Run the Flask API backend and Streamlit dashboard frontend app in your prefered terminal or command prompt, navigate to the root of the project and run the following command to launch everything at once:
+
    ```sh
    python3 main.py
    ```
+
 alternatively, you can run the backend and frontend separately:
 
 1. Run the Flask application:
    ```sh
    python3 run_backend.py
    ```
-2. Set your OPENAI_API_KEY environment variable in .env (located at the root level) or
-   Run the following command in your terminal, replacing yourkey with your API key.
-   Detailed instructions can be found here: https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety
-   - on a mac: `echo "export OPENAI_API_KEY='yourkey'" >> ~/.zshrc`
-   - windows: `setx OPENAI_API_KEY "<enter-your-key-here>" 
-4. Run the Streamlit application:
+
+2. Run the Streamlit application:
+ 
    ```sh
    python3 run_frontend.py
    ```
+
 **note**: the streamlit application is still in development but it is functional and contains basic visualizations and a chatbot. it is designed to serve as a dashboard for the Flask application and beyond. there is still lots of potential here.
 
 
