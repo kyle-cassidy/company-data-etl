@@ -27,8 +27,8 @@ set_title(st)
 
 ### simple chatbot with 10-Q and 10-K data
 ### more exciting things on the way...
-with st.container():
-
+with st.sidebar:
+    st.markdown("## Chatbot")
     prompt = display_chatbox_and_store_questions(st)
 
     display_message_history(st)
@@ -78,7 +78,6 @@ sp_500_comp["weight"] = round(sp_500_comp["weight"] * 100, 2)
 # Analysis and plots will be added in the following sections
 
 # Breakdown of Sectors in S&P 500
-st.markdown("## Breakdown of Sectors in S&P 500")
 st.markdown(
     "### Technology, industrials, health services, and financial services make up over half of the S&P 500"
 )
