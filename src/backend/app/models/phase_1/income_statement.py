@@ -4,7 +4,7 @@ class IncomeStatement(db.Model):
     __tablename__ = 'income_statements'
     # columns = ['id', 'company_id', 'period', 'revenue', 'net_income', 'eps', 'reported_currency' ]
     id = db.Column(db.Integer, primary_key=True)
-    company_id = db.Column(db.Integer, db.ForeignKey('sp_companies.id'), nullable=False)
+    company_id = db.Column(db.Integer, db.ForeignKey('sp_500_companies.id'), nullable=False)
     period = db.Column(db.Date, nullable=False)
     revenue = db.Column(db.Float, nullable=False) 
     net_income = db.Column(db.Float, nullable=False) 
@@ -17,7 +17,8 @@ class IncomeStatement(db.Model):
             dict_[key] = getattr(self, key)
         return dict_
 
-
+    def __repr__(self):
+        return f'<IncomeStatement {self.period} {self.company_id}>'
 
 
 

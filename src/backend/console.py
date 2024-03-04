@@ -36,7 +36,7 @@
 import sqlite3
 
 try:
-    conn = sqlite3.connect('api/data/sp500_p1.sqlite')
+    conn = sqlite3.connect('app/data/sp500_p1.sqlite')
     print("Connected to the database successfully")
     conn.close()
 except sqlite3.OperationalError as e:

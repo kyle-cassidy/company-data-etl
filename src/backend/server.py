@@ -18,7 +18,7 @@ def companies():
     return jsonify(companies_dict)
     
 # returns a single company by id
-@app.route('/companies/<int:id>')
+@app.route('/companies/id/<int:id>')
 def company_id(id):
     company = db.session.query(models.SPCompany).get(id)
     company_dict = company.to_dict()
@@ -30,3 +30,17 @@ def company_symbol(symbol):
     company = db.session.query(models.SPCompany).filter(models.SPCompany.symbol == symbol).first()
     company_dict = company.to_dict()    
     return jsonify(company_dict)
+
+# return all stocks by company symbol
+@app.route('/stocks/symbol/<string:symbol>')
+def stocks_symbol(symbol):
+    company = db.session.query(models.SPCompany).filter(models.SPCompany.symbol == symbol).first()
+    stocks = company.stocks
+    stocks_dict = [stock.to_dict() for stock in stocks]
+    breakpoint()
+    stocks_json = jsonify(stocks_dict)
+    breakpoint()
+    return stocks_json
+
+
+

@@ -7,13 +7,34 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.metrics import mean_squared_error
 import sqlite3
+import os
+
+import os
+import requests
+
+API_URL = os.getenv('API_URL', 'http://127.0.0.1:80')
+COMPANIES_URL = f'{API_URL}/companies'
+COMPANY_URL = f'{API_URL}/companies/symbol'
+STOCKS_URL = f'{API_URL}/stocks'
+
+st.title("Public Company Insights")
+
+# Connect to the database via API
+try:
+    companies = requests.get(COMPANIES_URL)
+    companies.raise_for_status()
+    companies = companies.json()
+    st.write(companies)
+except requests.exceptions.RequestException as e:
+    st.write(e)
 
 #TODO - pull out functions to a separate file
 #TODO - tie in flask API to pull data from the database
 
-# Set up connection to the database
-conn = sqlite3.connect('backend/api/data/sp500_p1_sm.sqlite')
-cursor = conn.cursor()
+# testing connection
+# sp500_p1_sqlite = os.path.join(os.path.dirname(__file__), '..', 'backend', 'app', 'data', 'sp500_p1_sm.sqlite')
+# conn = sqlite3.connect(sp500_p1_sqlite)
+# cursor = conn.cursor()
 
 # Function to display information about a dataframe
 def information(df_name, df):

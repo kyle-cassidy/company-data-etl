@@ -9,8 +9,8 @@ class SPCompany(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     exchange = db.Column(db.String(10))
-    symbol = db.Column(db.String(10), unique=True, nullable=False)
     short_name = db.Column(db.String(100), nullable=False)
+    symbol = db.Column(db.String(10), db.ForeignKey('sp_500_companies.symbol'), nullable=False)
     long_name = db.Column(db.String(100), nullable=False)
     sector = db.Column(db.String(100), nullable=False)
     industry = db.Column(db.String(100))
@@ -36,16 +36,16 @@ class SPCompany(db.Model):
     # Relationships:
 
     # a company has many stocks
-    stocks = db.relationship('SPStock', backref='company')
+    stocks = db.relationship('SPStock', backref='SPCompany')
 
     # a company has many income statements
-    income_statements = db.relationship('IncomeStatement', backref='company')
+    income_statements = db.relationship('IncomeStatement', backref='SPcompany')
     
     # a company has many cash flow statements
-    cash_flow_statements = db.relationship('CashFlowStatement', backref='company')
+    cash_flow_statements = db.relationship('CashFlowStatement', backref='SPcompany')
 
     # a company has many balance sheets
-    balance_sheets = db.relationship('BalanceSheet', backref='company')
+    balance_sheets = db.relationship('BalanceSheet', backref='SPcompany')
 
 
     # old ORM constructor

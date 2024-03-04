@@ -7,7 +7,7 @@ class SPStock(db.Model):
     # columns = ['id','date', 'symbol', 'adj_close', 'close', 'high', 'low', 'open', 'volume']
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date, nullable=False)
-    symbol = db.Column(db.String(10), nullable=False)
+    symbol = db.Column(db.String(10), db.ForeignKey('sp_500_companies.symbol'), nullable=False)
     adj_close = db.Column(db.Float, nullable=False)
     close = db.Column(db.Float)
     high = db.Column(db.Float)
@@ -19,14 +19,14 @@ class SPStock(db.Model):
         dict_ = {}
         for key in self.__mapper__.c.keys():
             dict_[key] = getattr(self, key)
-        return dict
+        return dict_
 
     def __repr__(self):
         return f'<SPStock {self.symbol}>'
     
     # Relationships:
     # a stock has one company
-    company = db.relationship('SPCompany', backref='stocks')
+    # company = db.relationship('SPCompany', backref='stocks')
 
     
 

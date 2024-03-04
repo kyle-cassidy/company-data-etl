@@ -4,7 +4,7 @@ class BalanceSheet(db.Model):
     __tablename__ = 'balance_sheets'
     # columns = ['id', 'company_id', 'period', 'total_debt', 'total_equity', 'reported_currency']
     id = db.Column(db.Integer, primary_key=True)
-    company_id = db.Column(db.Integer, db.ForeignKey('sp_companies.id'), nullable=False)
+    company_id = db.Column(db.Integer, db.ForeignKey('sp_500_companies.id'), nullable=False)
     period = db.Column(db.Date, nullable=False)
     total_debt = db.Column(db.Float, nullable=False)
     total_equity = db.Column(db.Float, nullable=False)

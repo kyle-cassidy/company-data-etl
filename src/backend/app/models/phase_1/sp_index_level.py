@@ -1,8 +1,12 @@
 from sqlalchemy.orm import relationship, backref
 from app import db
-class SPIndexLevel:
-    __table__ = 'sp_500_index_levels'
-    columns = ['id','date','index_level', 'index_name']
+class SPIndexLevel(db.Model):
+    __tablename__ = 'sp_500_index_levels'
+    # columns = ['id','date','index_level', 'index_name']
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.Date, nullable=False)
+    index_level = db.Column(db.Float, nullable=False)
+    index_name = db.Column(db.String(50), nullable=False)
 
 
 
