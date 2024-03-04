@@ -45,6 +45,7 @@ Set your OPENAI_API_KEY environment variable in .env (located at the root level)
 Run the following command in your terminal, replacing <enter-your-key-here> with your API key.
 
 - on a mac: `echo "export OPENAI_API_KEY=<enter-your-key-here>" >> ~/.zshrc`
+- Update the shell with the new variable: `source ~/.zshrc` (or restart your shell)
 - windows: `setx OPENAI_API_KEY "<enter-your-key-here>" 
 
 Detailed instructions can be found here: https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety
