@@ -11,3 +11,9 @@ seaborn
 scikit-learn
 simplejson
 pytest
+flask_sqlalchemy
+openai
+llama-index
+llama-index-llms-openai
+nltk
+pypdf

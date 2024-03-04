@@ -1,13 +1,40 @@
+
 venv/
 exploratory-data/
 .aider*
 __pycache__/
 secrets/
 .vscode/
-backend/api/data/seed
-.cursorignore
+documentation
 
+src/backend/api/data/seed/sp500
+src/backend/api/data/seed-SEC-EDGAR/
+# src/backend/api/data/seed-sp500/
+src/backend/api/data/seed/
+src/backend/api/data/seed/sp500/sp500_stocks.csv
+/Users/kielay/Developer/projects/company-data-etl/src/backend/api/data/seed/sp500/sp500_stocks.csv
+src/backend/api/data/seed
 
+.DS_Store
+secrets_manager/
+../.python-version
+config.md
+analysis/
+
+src/backend/api/src/utils/etl_adapters
+src/backend/api/src/utils/temp
+config copy.py
+config.md
+src/backend/api/src/utils/temp/
+src/backend/api/data/seed-sp500/sp500_stocks/.2010-2019
+src/backend/api/data/sp500_p1.sqlite
+src/backend/api/src/db/db copy.py
+src/frontend/view_functions.py
+src/frontend/index.py
+
+#restructure 2024-03-03
+src/backend/app/utils/seed_adapters/run_seed_adapters.py.bak
+src/backend/app/utils/db/db copy.py
 
 
 # Byte-compiled / optimized / DLL files

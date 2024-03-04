@@ -1,19 +1,25 @@
-notes/
 venv/
 exploratory-data/
 .aider*
 __pycache__/
 secrets/
 .vscode/
+
+notes/
 documentation
 tasks/
-backend/api/data/seed/sp500
-backend/api/data/seed-SEC-EDGAR/
-# backend/api/data/seed-sp500/
-backend/api/data/seed/
-backend/api/data/seed/sp500/sp500_stocks.csv
-/Users/kielay/Developer/projects/company-data-etl/backend/api/data/seed/sp500/sp500_stocks.csv
-backend/api/data/seed
+
+tasks.md
+analysis_psql.ipynb
+# large db
+src/backend/app/data/seed/
+src/backend/app/data/seed/SEC-EDGAR
+src/backend/app/data/seed/sp500
+src/backend/api/data/seed/sp500/sp500_stocks.csv
+src/backend/api/data/seed/sp500/sp500_stocks.csv
+
+src/backend/app/data/sp500_p1.sqlite
+src/backend/app/utils/etl_adapters/
 
 .DS_Store
 secrets_manager/
@@ -21,16 +27,22 @@ secrets_manager/
 config.md
 analysis/
 
-backend/api/src/utils/etl_adapters
-backend/api/src/utils/temp
+src/backend/api/src/utils/etl_adapters
+src/backend/api/src/utils/temp
 config copy.py
 config.md
-backend/api/src/utils/temp/
-backend/api/data/seed-sp500/sp500_stocks/.2010-2019
-backend/api/data/sp500_p1.sqlite
-backend/api/src/db/db copy.py
-frontend/view_functions.py
-frontend/index.py
+src/backend/api/src/utils/temp/
+src/backend/api/data/seed-sp500/sp500_stocks/.2010-2019
+src/backend/api/data/sp500_p1.sqlite
+src/backend/api/src/db/db copy.py
+
+src/frontend/z/
+
+
+#restructure 2024-03-03
+src/backend/app/utils/seed_adapters/run_seed_adapters.py.bak
+src/backend/app/utils/db/db copy.py
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
