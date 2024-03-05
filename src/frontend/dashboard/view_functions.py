@@ -91,6 +91,7 @@ def chatbot(st):
 
 
 def launch_chatbot(st):
+    load_dotenv()
     if os.getenv("OPENAI_API_KEY"):
         chatbot(st)
     else:

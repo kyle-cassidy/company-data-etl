@@ -149,5 +149,3 @@ st.dataframe(sp_500_stocks.head())
 
 with st.sidebar:
     launch_chatbot(st)
-    if "api_key" in ss and ss["api_key"]:
-        chatbot(st)
