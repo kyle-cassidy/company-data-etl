@@ -1,10 +1,16 @@
 import streamlit as st
-from streamlit_state import assign_chat_engine, assign_messages
 from view_functions import (
-    set_title,
+    set_config,
+    # set_title,
     display_message_history,
     display_chatbox_and_store_questions,
     submit_prompt_display_result,
+    # launch_bot_api_key,
+    # sidebar_chatbot,
+    launch_chatbot,
+    chatbot,
+    assign_chat_engine,
+    assign_messages,
 )
 import numpy as np
 import pandas as pd
@@ -20,20 +26,9 @@ import os
 # TODO - pull out analysis functions to a separate file
 
 
-assign_chat_engine(st)
-assign_messages(st)
-
-set_title(st)
-
-### simple chatbot with 10-Q and 10-K data
-### more exciting things on the way...
-with st.sidebar:
-    st.markdown("## Chatbot")
-    prompt = display_chatbox_and_store_questions(st)
-
-    display_message_history(st)
-
-    submit_prompt_display_result(st, prompt)
+set_config(st)
+st.title("Public Company Insights: S&P 500")
+st.markdown("Note: the chatbot in the left sidebar is under active development.")
 
 
 # localhost API URL: src/backend/.flaskenv
@@ -152,17 +147,7 @@ st.dataframe(sp_500_index.head())
 st.write("S&P 500 Stocks")
 st.dataframe(sp_500_stocks.head())
 
-
-# Top 5 Companies in Top 3 Industries of Top 5 Sectors
-# st.markdown("## Top 5 Companies in Top 3 Industries of Top 5 Sectors")
-# The implementation of this section will require additional functions and logic to be adapted from the analysis_sqlite.py notebook.
-# This will be implemented in the following updates.
-
-# Number of companies for each exchange
-# st.markdown("### Number of companies for each exchange")
-# exchange_counts = sp_500_comp['exchange'].value_counts()
-# fig, ax = plt.subplots()
-
-# ax.pie(exchange_counts, labels=exchange_counts.index, autopct='%.2f%%')
-# plt.tight_layout()
-# st.pyplot(fig)
+with st.sidebar:
+    launch_chatbot(st)
+    if "api_key" in ss and ss["api_key"]:
+        chatbot(st)
