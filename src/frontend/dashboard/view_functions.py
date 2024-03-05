@@ -96,8 +96,8 @@ def launch_chatbot(st):
         chatbot(st)
     else:
         st.write(
-            "## Enter your OpenAI API key"
-            "You can sign up to OpenAI and/or create your API key [here](https://platform.openai.com/account/api-keys)"
+            "## Enter your OpenAI API key\n"
+            "You can sign up to OpenAI and/or create your API key [here](https://platform.openai.com/account/api-keys)\n"
         )
         api_key = st.text_input("OpenAI API key", type="password", key="api_key")
         if api_key:
