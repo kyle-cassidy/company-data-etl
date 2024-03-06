@@ -20,6 +20,7 @@ class SP500Seeder:
         self.session = session
 
     def seed_companies(self, companies_csv_directory):
+        # sourcery skip: class-extract-method
 
         try:
             for filename in os.listdir(companies_csv_directory):
@@ -56,7 +57,6 @@ class SP500Seeder:
             self.session.commit()
             print("Companies seeded to the database successfully")
         except Exception as e:
-            # If an error occurs, rollback the session to undo any changes
             print("Error seeding companies to the database. Rolling back changes.")
             self.session.rollback()
             # Raise the error for further handling

@@ -51,7 +51,6 @@ def find_all(Class, cursor):
     return [build_from_record(Class, record) for record in records]
 
 
-# updated find() method for SQLite should also work for PostgreSQL. # TODO: test this method with PostgreSQL
 def find(Class, id, cursor):
     sql_str = f"SELECT * FROM {Class.__table__} WHERE id = :id"
     cursor.execute(sql_str, {'id': id})
