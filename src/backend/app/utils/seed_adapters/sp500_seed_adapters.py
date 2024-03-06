@@ -16,87 +16,109 @@ import os
 
 
 class SP500Seeder:
-    def __init__(self, db_connection):
-        self.conn = db_connection
-        self.cursor = self.conn.cursor()
+    def __init__(self, session):
+        self.session = session
 
     def seed_companies(self, companies_csv_directory):
 
-        for filename in os.listdir(
-            companies_csv_directory
-        ):  # Iterate over each CSV file in the directory
-            if filename.endswith(".csv"):
-                companies_csv_path = os.path.join(
-                    companies_csv_directory, filename
-                )  # Iterate over each row in the DataFrame
-                companies_df = pd.read_csv(companies_csv_path)
+        try:
+            for filename in os.listdir(companies_csv_directory):
+                if filename.endswith(".csv"):
+                    # Construct the full path to the CSV file
+                    companies_csv_path = os.path.join(companies_csv_directory, filename)
+                    companies_df = pd.read_csv(companies_csv_path)
+                    # Iterate over each row in the DataFrame
+                    for _, row in companies_df.iterrows():
+                        # Map CSV row to company_data dictionary
+                        company_data = {
+                            "exchange": row["Exchange"],
+                            "symbol": row["Symbol"],
+                            "short_name": row["Shortname"],
+                            "long_name": row["Longname"],
+                            "sector": row["Sector"],
+                            "industry": row["Industry"],
+                            "current_price": row["Currentprice"],
+                            "market_cap": row["Marketcap"],
+                            "ebitda": row["Ebitda"],
+                            "revenue_growth": row["Revenuegrowth"],
+                            "city": row["City"],
+                            "state": row["State"],
+                            "country": row["Country"],
+                            "long_business_summary": row["Longbusinesssummary"],
+                            "weight": row["Weight"],
+                        }
+                        # Create an instance of SPCompany with the mapped data
+                        new_company = SPCompany(**company_data)
+                        # Add the new instance to the session
+                        self.session.add(new_company)
 
-                for (
-                    _,
-                    row,
-                ) in (
-                    companies_df.iterrows()
-                ):  # Map CSV row to company_data dictionary including all columns
-                    company_data = {
-                        "exchange": row["Exchange"],
-                        "symbol": row["Symbol"],
-                        "short_name": row["Shortname"],
-                        "long_name": row["Longname"],
-                        "sector": row["Sector"],
-                        "industry": row["Industry"],
-                        "current_price": row["Currentprice"],
-                        "market_cap": row["Marketcap"],
-                        "ebitda": row["Ebitda"],
-                        "revenue_growth": row["Revenuegrowth"],
-                        "city": row["City"],
-                        "state": row["State"],
-                        "country": row["Country"],
-                        "long_business_summary": row["Longbusinesssummary"],
-                        "weight": row["Weight"],
-                    }
-                    # SQLAlchemy ORM
-                    new_company = SPCompany(**company_data)  # Create an instance
-                    db.session.add(new_company)  # Add object to session
-                    db.session.commit()  # Commit the session to save to the database
+            # After all companies have been added to the session, commit the session to save changes to the database
+            self.session.commit()
+            print("Companies seeded to the database successfully")
+        except Exception as e:
+            # If an error occurs, rollback the session to undo any changes
+            print("Error seeding companies to the database. Rolling back changes.")
+            self.session.rollback()
+            # Raise the error for further handling
+            raise e
+        finally:
+            print("Closing the session")
+            self.session.close()
 
     def seed_stocks(self, stocks_csv_directory):
-        for filename in os.listdir(stocks_csv_directory):
-            if filename.endswith(".csv"):
-                stocks_csv_path = os.path.join(stocks_csv_directory, filename)
-                stocks_df = pd.read_csv(stocks_csv_path)
-                for _, row in stocks_df.iterrows():
-                    stock_data = {
-                        "date": row["Date"],
-                        "symbol": row["Symbol"],
-                        "adj_close": row["Adj Close"],
-                        "close": row["Close"],
-                        "high": row["High"],
-                        "low": row["Low"],
-                        "open": row["Open"],
-                        "volume": row["Volume"],
-                    }
-                    new_stock = SPStock(**stock_data)
-                    db.session.add(new_stock)
-                    db.session.commit()
+        try:
+            for filename in os.listdir(stocks_csv_directory):
+                if filename.endswith(".csv"):
+                    stocks_csv_path = os.path.join(stocks_csv_directory, filename)
+                    stocks_df = pd.read_csv(stocks_csv_path)
+                    for _, row in stocks_df.iterrows():
+                        stock_data = {
+                            "date": row["Date"],
+                            "symbol": row["Symbol"],
+                            "adj_close": row["Adj Close"],
+                            "close": row["Close"],
+                            "high": row["High"],
+                            "low": row["Low"],
+                            "open": row["Open"],
+                            "volume": row["Volume"],
+                        }
+                        new_stock = SPStock(**stock_data)
+                        self.session.add(new_stock)
+            self.session.commit()
+            print("Stocks seeded to the database successfully")
+
+        except Exception as e:
+            print("Error seeding stocks to the database. Rolling back changes.")
+            self.session.rollback()
+            raise e
+
+        finally:
+            print("Stocks seeding process completed.")
 
     def seed_index(self, index_csv_directory):
-        for filename in os.listdir(index_csv_directory):
-            if filename.endswith(".csv"):
-                index_csv_path = os.path.join(index_csv_directory, filename)
-                index_df = pd.read_csv(index_csv_path)
-                for _, row in index_df.iterrows():
-                    index_data = {
-                        "date": row["Date"],
-                        "index_level": row["IndexLevel"],
-                        "index_name": "S&P 500",
-                    }
-                    new_index = SPIndexLevel(**index_data)
-                    db.session.add(new_index)
-                    db.session.commit()
+        try:
+            for filename in os.listdir(index_csv_directory):
+                if filename.endswith(".csv"):
+                    index_csv_path = os.path.join(index_csv_directory, filename)
+                    index_df = pd.read_csv(index_csv_path)
+                    for _, row in index_df.iterrows():
+                        index_data = {
+                            "date": row["Date"],
+                            "index_level": row["IndexLevel"],
+                            "index_name": "S&P 500",
+                        }
+                        new_index = SPIndexLevel(**index_data)
+                        self.session.add(new_index)
+            self.session.commit()
+            print("Index levels seeded to the database successfully")
 
-    # def close(self): # part of old ORM
-    #     self.cursor.close()
-    #     self.conn.close()
+        except Exception as e:
+            print("Error seeding index levels to the database. Rolling back changes.")
+            self.session.rollback()
+            raise e
+
+        finally:
+            print("Index seeding process completed.")
 
 
 # ------------------------------------------------------------------------------------------------------------------------#
