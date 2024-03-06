@@ -4,6 +4,11 @@ exploratory-data/
 __pycache__/
 secrets/
 .vscode/
+.sourcery.yaml
+.cursorignore
+.gitignore
+.python-version
+
 
 notes/
 documentation
