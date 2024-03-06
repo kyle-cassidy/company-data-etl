@@ -1,18 +1,46 @@
-import sqlite3
+from sqlalchemy import create_engine
 import os
 
-# Define the path to the and create_tables & database files relative to the project root
-db_path = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'data', 'sp500_p1_sm.sqlite') #FIXME: need to update migration paths to match new project structure
-sql_file_path = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'data', 'migrations', 'phase_1', 'create_tables_phase_1_lite.sql')
+db_path = os.path.join(
+    os.path.dirname(__file__), "..", "..", "..", "data", "sp500_p1_sm.sqlite"
+)
+sql_file_path = os.path.join(
+    os.path.dirname(__file__),
+    "..",
+    "..",
+    "..",
+    "data",
+    "migrations",
+    "phase_1",
+    "create_tables_phase_1_lite.sql",
+)
+db_uri = f"sqlite:///{db_path}"
 
-def create_tables_from_sql_file(db_path=db_path, sql_file_path=sql_file_path):
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
-    with open(sql_file_path, 'r') as sql_file:
-        sql_script = sql_file.read()
-    cursor.executescript(sql_script)
-    conn.commit()
-    conn.close()
+
+def create_tables_from_sql_file(db_uri=db_uri, sql_file_path=sql_file_path):
+    engine = create_engine(db_uri)
+    with engine.connect() as connection:
+        with open(sql_file_path, "r") as sql_file:
+            sql_script = sql_file.read()
+        connection.execute(sql_script)
+
+
+# depricated
+# import sqlite3
+# import os
+
+# # Define the path to the and create_tables & database files relative to the project root
+# db_path = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'data', 'sp500_p1_sm.sqlite') #FIXME: need to update migration paths to match new project structure
+# sql_file_path = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'data', 'migrations', 'phase_1', 'create_tables_phase_1_lite.sql')
+
+# def create_tables_from_sql_file(db_path=db_path, sql_file_path=sql_file_path):
+#     conn = sqlite3.connect(db_path)
+#     cursor = conn.cursor()
+#     with open(sql_file_path, 'r') as sql_file:
+#         sql_script = sql_file.read()
+#     cursor.executescript(sql_script)
+#     conn.commit()
+#     conn.close()
 
 # moved to seed_db.py
 # if __name__ == "__main__":
