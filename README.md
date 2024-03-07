@@ -143,8 +143,8 @@ For any queries or further assistance, please contact the repository owner.
 
 
 
-   docker build -t company-data-etl:prod -f Dockerfile . 
-   docker run -it --rm --entrypoint /bin/bash --env-file=.flaskenv --name company-data-etl-prod company-data-etl:prod
+   docker build -t company-data-etl:dev -f Dockerfile . 
+   docker run -it --entrypoint /bin/bash --env-file=.flaskenv --name company-data-etl-prod company-data-etl:dev
 
 
 

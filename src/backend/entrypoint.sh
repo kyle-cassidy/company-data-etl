@@ -3,4 +3,4 @@
 HOST=${HOST:-0.0.0.0}
 PORT=${PORT:-80}
 
-python manage.py run -h $HOST -p $PORT
+python3 main.py run -h $HOST -p $PORT
