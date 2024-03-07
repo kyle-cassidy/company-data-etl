@@ -1,4 +1,4 @@
-CREATE TABLE sp_500_companies (
+CREATE TABLE IF NOT EXISTS sp_500_companies (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     exchange TEXT NOT NULL,
     symbol TEXT NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE sp_500_companies (
     weight REAL
 );
 
-CREATE TABLE sp_500_stocks (
+CREATE TABLE IF NOT EXISTS sp_500_stocks (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     date TEXT NOT NULL,
     symbol TEXT NOT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE sp_500_stocks (
     volume TEXT
 );
 
-CREATE TABLE sp_500_index_levels (
+CREATE TABLE IF NOT EXISTS sp_500_index_levels (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     date TEXT NOT NULL, 
     index_level REAL,
