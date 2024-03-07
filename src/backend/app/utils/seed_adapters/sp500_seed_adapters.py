@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 from app import db
 import pandas as pd
 import os
+import datetime
 
 
 # TODO: add financial statement adapters
@@ -18,6 +19,10 @@ import os
 class SP500Seeder:
     def __init__(self, session):
         self.session = session
+
+    def close(self):
+        """Close the database session."""
+        self.session.close()
 
     def seed_companies(self, companies_csv_directory):
         # sourcery skip: class-extract-method
@@ -72,8 +77,11 @@ class SP500Seeder:
                     stocks_csv_path = os.path.join(stocks_csv_directory, filename)
                     stocks_df = pd.read_csv(stocks_csv_path)
                     for _, row in stocks_df.iterrows():
+                        date_object = datetime.datetime.strptime(
+                            row["Date"], "%Y-%m-%d"
+                        ).date()
                         stock_data = {
-                            "date": row["Date"],
+                            "date": date_object,
                             "symbol": row["Symbol"],
                             "adj_close": row["Adj Close"],
                             "close": row["Close"],

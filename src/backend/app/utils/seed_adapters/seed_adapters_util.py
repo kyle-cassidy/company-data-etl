@@ -1,3 +1,4 @@
+from sqlalchemy.engine.reflection import Inspector
 import os
 import sqlite3
 from sqlalchemy.orm import Session
@@ -15,13 +16,13 @@ sp500_p1_sqlite = os.path.join(
 # Define the paths to the directories holding the seed data
 # defined relative to the project root:
 sp500_companies = os.path.join(
-    os.path.dirname(__file__), "..", "..", "..", "data", "seed-sp500", "sp500_companies"
+    os.path.dirname(__file__), "..", "..", "data", "seed-sp500", "sp500_companies"
 )
 sp500_stocks = os.path.join(
-    os.path.dirname(__file__), "..", "..", "..", "data", "seed-sp500", "sp500_stocks"
+    os.path.dirname(__file__), "..", "..", "data", "seed-sp500", "sp500_stocks"
 )
 sp500_index = os.path.join(
-    os.path.dirname(__file__), "..", "..", "..", "data", "seed-sp500", "sp500_index"
+    os.path.dirname(__file__), "..", "..", "data", "seed-sp500", "sp500_index"
 )
 
 
@@ -33,7 +34,6 @@ def seed_sp500_postgres(session=None):
     if session is None:
         session = db.session
     seeder = SP500Seeder(session)
-
     seeder.seed_companies(sp500_companies)
     seeder.seed_stocks(sp500_stocks)
     seeder.seed_index(sp500_index)
@@ -42,11 +42,9 @@ def seed_sp500_postgres(session=None):
 
 # SQLite
 def seed_sp500_sqlite(session=None, db_path=sp500_p1_sqlite):
-    # Assuming SP500Seeder is a class that handles seeding
     if session is None:
         session = db.session
     seeder = SP500Seeder(session)
-
     seeder.seed_companies(sp500_companies)
     seeder.seed_stocks(sp500_stocks)
     seeder.seed_index(sp500_index)

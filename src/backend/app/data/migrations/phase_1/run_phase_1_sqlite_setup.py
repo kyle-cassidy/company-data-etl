@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 import os
 
 db_path = os.path.join(
@@ -21,8 +21,15 @@ def create_tables_from_sql_file(db_uri=db_uri, sql_file_path=sql_file_path):
     engine = create_engine(db_uri)
     with engine.connect() as connection:
         with open(sql_file_path, "r") as sql_file:
-            sql_script = sql_file.read()
-        connection.execute(sql_script)
+            # Split the script into separate statements on the semicolon (excluding any that are empty after the split)
+            sql_statements = [
+                statement.strip()
+                for statement in sql_file.read().split(";")
+                if statement.strip()
+            ]
+        for statement in sql_statements:
+            # Wrap the statement with text() for SQLAlchemy to execute
+            connection.execute(text(statement))
 
 
 # depricated
