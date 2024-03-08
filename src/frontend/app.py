@@ -28,14 +28,8 @@ set_config(st)
 st.title("Public Company Insights: S&P 500")
 st.markdown("Note: the chatbot in the left sidebar is under active development.")
 
-
-# localhost API URL: src/backend/.flaskenv
-# API_URL = os.getenv("API_URL", "http://127.0.0.1:80")
+# API URL from flask backend api service
 API_URL = os.getenv("API_URL", "http://backend:8000/")
-
-# docker API URL
-# API_URL = "http://backend:8000/"
-# API_URL = "http://127.0.0.1:8000/"
 
 # API endpoints
 COMPANIES_URL = f"{API_URL}/companies"
