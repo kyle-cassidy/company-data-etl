@@ -4,6 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.metrics import mean_squared_error
+
 # import json
 # import requests
 # import os
@@ -83,15 +84,18 @@ def additional_market_cap_analysis(st, sp_500_comp):
     )
     st.dataframe(top_comp_mkt_cap)
 
+
 # Correlation Matrix
 def correlation_matrix(st, sp_500_comp):
-    st.markdown("### Size and profitability of a company are closely linked to its weight")
+    st.markdown(
+        "### Size and profitability of a company are closely linked to its weight"
+    )
     st.markdown(
         "Current price and revenue growth are not strongly connected to these factors."
     )
     correlation_matrix = sp_500_comp[
         ["current_price", "market_cap", "ebitda", "revenue_growth", "weight"]
-        .corr()
+    ].corr()
     fig, ax = plt.subplots()
     sns.heatmap(correlation_matrix, annot=True, cmap="coolwarm", fmt=".2f")
     plt.title("Profitability is correlated to weight")
@@ -101,9 +105,10 @@ def correlation_matrix(st, sp_500_comp):
     st.markdown(
         "Weight is calculated by the S&P 500 index committee and is based on market cap and liquidity. Stock price x shares outstanding."
     )
-    
+
+
 # display head of dataframes
-def display_dataframes(st, company=sp_500_comp, index=sp_500_index, stocks=sp_500_stocks):
+def display_dataframes(st, sp_500_comp, sp_500_index, sp_500_stocks):
     st.markdown("### Explore: S&P 500 Dataframes")
     st.write("S&P 500 Companies")
     st.dataframe(sp_500_comp.head())
@@ -111,7 +116,7 @@ def display_dataframes(st, company=sp_500_comp, index=sp_500_index, stocks=sp_50
     st.dataframe(sp_500_index.head())
     st.write("S&P 500 Stocks")
     st.dataframe(sp_500_stocks.head())
-    
+
     # start of a refactored version of the function
     # for df in list_of_dataframes:
     #     st.write(df.head())
