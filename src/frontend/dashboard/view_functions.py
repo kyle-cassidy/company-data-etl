@@ -1,24 +1,14 @@
-from llama_index.core.indices.loading import load_index_from_storage
-from llama_index.core.storage.storage_context import StorageContext
-from dotenv import load_dotenv
 import streamlit as st
-import pathlib
-import os
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.metrics import mean_squared_error
 
-# load_dotenv()
-# OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-# os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
-
-# Get the absolute path of the current file's directory
-current_file_dir = pathlib.Path(__file__).parent.absolute()
-# Construct the path to the storage directory relative to the current file's location
-storage_dir = current_file_dir.joinpath("../storage")
-
-
-def load_from_db():
-    storage_context = StorageContext.from_defaults(persist_dir=str(storage_dir))
-    index = load_index_from_storage(storage_context)
-    return index
+# import json
+# import requests
+# import os
+# import pathlib
 
 
 def set_config(st):
@@ -32,105 +22,101 @@ def set_config(st):
     ss = st.session_state
     if "debug" not in ss:
         ss["debug"] = {}
-        # ss["api_key"] = {}
-
-    # st.write(f"<style>{css.v1}</style>", unsafe_allow_html=True)
-    # header1 = st.empty()  # for errors / messages
-    # header2 = st.empty()  # for errors / messages
-    # header3 = st.empty()  # for errors / messages
 
 
-# chatbot
+# Sector Breakdown
+def sector_breakdown(st, sp_500_comp):
+    # Breakdown of Sectors in S&P 500
+    st.markdown(
+        "### Technology, industrials, health services, and financial services make up over half of the S&P 500"
+    )
+    sp_sec_brk = (
+        sp_500_comp.groupby(by="sector")["symbol"]
+        .apply(lambda x: round(x.count() / len(sp_500_comp) * 100, 2))
+        .reset_index()
+        .sort_values(by="symbol", ascending=False)
+    )
+    fig, ax = plt.subplots(figsize=(10, 8))
+    ax = sns.barplot(data=sp_sec_brk, x="sector", y="symbol")
+    ax.bar_label(ax.containers[0], fmt="%.0f%%")
+    plt.xticks(rotation=85)
+    plt.title("Breakdown of Sectors in S&P 500 (in %)\n")
+    ax.set_ylabel("Percentage")
+    st.pyplot(fig)
 
 
-def display_message_history(st):
-    for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.write(message["content"])
-
-
-def display_chatbox_and_store_questions(st):
-    if prompt := st.chat_input("Your question"):
-        message = {"role": "user", "content": prompt}
-        st.session_state.messages.append(message)
-    return prompt
-
-
-def submit_prompt_display_result(st, prompt):
-    if st.session_state.messages[-1]["role"] != "assistant":
-        with st.chat_message("assistant"):
-            with st.spinner("Thinking..."):
-                response = st.session_state.chat_engine.query(prompt)
-                st.write(response.response)
-                message = {"role": "assistant", "content": response.response}
-                st.session_state.messages.append(
-                    message
-                )  # Add response to message history
-
-
-def assign_chat_engine(st):
-    if "chat_engine" not in st.session_state.keys():
-        index = load_from_db()
-        st.session_state.chat_engine = index.as_query_engine()
-
-
-def assign_messages(st):
-    content = "Ask me a question about Uber or Lyft in 2021!"
-    if "messages" not in st.session_state.keys():
-        st.session_state.messages = [{"role": "assistant", "content": content}]
-
-
-###1
-def chatbot(st):
-    assign_chat_engine(st)
-    assign_messages(st)
-    st.markdown("## Chatbot")
-    prompt = display_chatbox_and_store_questions(st)
-    display_message_history(st)
-    submit_prompt_display_result(st, prompt)
-
-
-def launch_chatbot(st):
-    load_dotenv()
-    if os.getenv("OPENAI_API_KEY"):
-        chatbot(st)
-    else:
-        st.write(
-            "## Enter your OpenAI API key\n"
-            "You can sign up to OpenAI and/or create your API key [here](https://platform.openai.com/account/api-keys)\n"
+# Tech Companies Dominate S&P 500 by Market Cap
+def companies_market_cap(st, sp_500_comp):
+    st.markdown("### Tech Companies Dominate S&P 500 by Market Cap")
+    estimators = ["market_cap", "weight"]
+    color = {"market_cap": "Blues_r", "weight": "Oranges_r"}
+    for est in estimators:
+        fig, ax = plt.subplots()
+        sns.barplot(
+            data=sp_500_comp.sort_values(by=est, ascending=False).head(10),
+            y=est,
+            x="symbol",
+            palette=color[est],
         )
-        api_key = st.text_input("OpenAI API key", type="password", key="api_key")
-        if api_key:
-            os.environ["OPENAI_API_KEY"] = api_key
-            chatbot(st)
+        plt.xticks(rotation=45)
+        plt.title(
+            "Tech Companies Dominate S&P 500 {}".format(est.replace("_", " ").title())
+        )
+        st.pyplot(fig)
 
 
-###2
-# def launch_bot_api_key(ss, st):
-#     st.write("## Enter your OpenAI API key")
-#     # Use the on_change callback to handle API key input
-#     api_key = st.text_input(
-#         "OpenAI API key",
-#         type="password",
-#         key="api_key",
-#         on_change=api_key_entered,
-#         args=(ss, st),
-#     )
+# Additional Market Cap Analysis
+def additional_market_cap_analysis(st, sp_500_comp):
+    st.markdown("#### Additional Market Cap Analysis")
+    top_comp_mkt_cap = (
+        sp_500_comp[
+            [
+                "symbol",
+                "current_price",
+                "market_cap",
+                "ebitda",
+                "revenue_growth",
+                "weight",
+            ]
+        ]
+        .sort_values(by="market_cap", ascending=False)
+        .head(10)
+    )
+    st.dataframe(top_comp_mkt_cap)
 
 
-# def api_key_entered(ss, st):
-#     # This function is called when the API key input changes.
-#     # Check if the API key is provided and store it in the session state and as an environment variable.
-#     if "api_key" in ss and ss["api_key"]:
-#         os.environ["OPENAI_API_KEY"] = ss["api_key"]
-#         # Directly call sidebar_chatbot after setting the API key.
-#         sidebar_chatbot(st)
-#     else:
-#         # If the API key is somehow not set, you might want to handle this case, e.g., show a warning.
-#         st.warning("Please enter your OpenAI API key.")
+# Correlation Matrix
+def correlation_matrix(st, sp_500_comp):
+    st.markdown(
+        "### Size and profitability of a company are closely linked to its weight"
+    )
+    st.markdown(
+        "Current price and revenue growth are not strongly connected to these factors."
+    )
+    correlation_matrix = sp_500_comp[
+        ["current_price", "market_cap", "ebitda", "revenue_growth", "weight"]
+    ].corr()
+    fig, ax = plt.subplots()
+    sns.heatmap(correlation_matrix, annot=True, cmap="coolwarm", fmt=".2f")
+    plt.title("Profitability is correlated to weight")
+    plt.xticks(rotation=45)
+    plt.yticks(rotation=0)
+    st.pyplot(fig)
+    st.markdown(
+        "Weight is calculated by the S&P 500 index committee and is based on market cap and liquidity. Stock price x shares outstanding."
+    )
 
 
-# ## load last: end of main app.
-# # Ensure sidebar_chatbot is called if the API key already exists in the session state when the page is loaded or rerun.
-# if "api_key" in ss and ss["api_key"]:
-#     sidebar_chatbot(st)
+# display head of dataframes
+def display_dataframes(st, sp_500_comp, sp_500_index, sp_500_stocks):
+    st.markdown("### Explore: S&P 500 Dataframes")
+    st.write("S&P 500 Companies")
+    st.dataframe(sp_500_comp.head())
+    st.write("S&P 500 Index Levels")
+    st.dataframe(sp_500_index.head())
+    st.write("S&P 500 Stocks")
+    st.dataframe(sp_500_stocks.head())
+
+    # start of a refactored version of the function
+    # for df in list_of_dataframes:
+    #     st.write(df.head())
