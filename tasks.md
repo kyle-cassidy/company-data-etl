@@ -17,17 +17,18 @@
 - [ ] 
 ### models
 - [x] refactor the financial python model class into three models
-- [ ] build model relations
-- [ ] build model methods to interact with the database and do analysis
+- [x] build model relations
+- [x] build model methods to interact with the database and do analysis
+- [ ] 
 
 ### app
-- [ ] Initialize Flask application.
-- [ ] Initialize streamlit application
-- [ ] connect to eachother via API
+- [x] Initialize Flask application.
+- [x] Initialize streamlit application
+- [x] connect to eachother via API
 
+- [ ] move main.py and all executables to src folder. change imports accordingly. 
 - [ ] Write utility scripts.
 - [ ] Write tests.
-- [ ] 
 
 ## phase 2
 - [ ] analysis 

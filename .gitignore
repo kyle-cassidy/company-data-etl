@@ -6,10 +6,10 @@ secrets/
 .vscode/
 .sourcery.yaml
 .cursorignore
-.gitignore
-.python-version
 
-
+src/frontend/depricated
+src/backend/depricated
+data/
 notes/
 documentation
 tasks/
