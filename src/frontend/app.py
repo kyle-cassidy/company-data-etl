@@ -1,5 +1,13 @@
 import streamlit as st
-from view_functions import (
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.metrics import mean_squared_error
+import json
+import requests
+import os
+from dashboard.view_functions import (
     set_config,
     # set_title,
     display_message_history,
@@ -12,16 +20,6 @@ from view_functions import (
     assign_chat_engine,
     assign_messages,
 )
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-import matplotlib.pyplot as plt
-import seaborn as sns
-from sklearn.metrics import mean_squared_error
-import json
-import requests
-import os
 
 # TODO - pull out analysis functions to a separate file
 
@@ -32,7 +30,12 @@ st.markdown("Note: the chatbot in the left sidebar is under active development."
 
 
 # localhost API URL: src/backend/.flaskenv
-API_URL = os.getenv("API_URL", "http://127.0.0.1:80")
+# API_URL = os.getenv("API_URL", "http://127.0.0.1:80")
+API_URL = os.getenv("API_URL", "http://backend:8000/")
+
+# docker API URL
+# API_URL = "http://backend:8000/"
+# API_URL = "http://127.0.0.1:8000/"
 
 # API endpoints
 COMPANIES_URL = f"{API_URL}/companies"
@@ -49,9 +52,17 @@ st.markdown("## Industry Analysis on the S&P 500")
 
 # Connect to the database via API
 def get_json(URL):
-    response = requests.get(URL)
-    response.raise_for_status()
-    return response.json()
+    try:
+        response = requests.get(URL)
+        response.raise_for_status()
+        return response.json()
+    # try:
+    #     response = requests.post(URL)
+    #     response.raise_for_status()
+    #     return response.json()
+
+    except requests.exceptions.HTTPError as err:
+        raise SystemExit(err) from err
 
 
 companies_json = get_json(COMPANIES_URL)

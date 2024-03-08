@@ -8,7 +8,7 @@ secrets/
 .cursorignore
 
 
-
+data/
 notes/
 documentation
 tasks/

@@ -1,0 +1,11 @@
+# python 3.12
+# backend
+python-dotenv
+requests
+pandas
+psycopg2-binary
+flask
+flask-sqlalchemy
+sqlalchemy
+pypdf
+nltk
