@@ -1,16 +1,15 @@
+```markdown:README.md
 # README.md
 
 ## Overview
 
-This application is designed to extract, process, and analyze data related to public companies from both structured and unstructured sources. It provides insights through calculated financial ratios, sentiment analysis, and trend identification, culminating in a summary via streamlit dashboard and chatbot.
+This application is designed to extract, process, and analyze data related to public companies from both structured and unstructured sources. It provides insights through calculated financial ratios, sentiment analysis, and trend identification, culminating in a summary via a Streamlit dashboard and chatbot.
 
 ## Getting Started
 
 ### Prerequisites
 
-Ensure you have the following installed:
-- Python 3.x
-- Pip (Python package installer)
+Ensure Docker and Docker Compose are installed on your system. For installation instructions, refer to the [Docker documentation](https://docs.docker.com/get-docker/) and [Docker Compose documentation](https://docs.docker.com/compose/install/).
 
 ### Installation
 
@@ -18,115 +17,98 @@ Ensure you have the following installed:
    ```sh
    git clone https://github.com/kyle-cassidy/company-data-etl
    ```
-2. Navigate to the project directory
+2. Navigate to the project directory:
    ```sh
-   python3 -m venv venv
-   ```
-3. Activate env
-   ```sh
-   source venv/bin/activate
-   ```
-5. Install the required dependencies
-   ```
-   pip3 install -r requirements.txt
-   ```
-   * note: if you would like to use jupyter notebook to run interactive cells, you will need to install the jupyter notebook package in your venv as well. to do so, run the following command in your terminal or command prompt:
-   
-   `pip3 install jupyter`
-
-## The Application
-the application is designed to extract, process, and analyze data related to public companies from both structured and unstructured sources. currently it collects, transforms, translates structured data and  provides insights through calculated financial ratios, sentiment analysis, and trend identification, culminating in a summary via streamlit.
-
-*update*: a demonstration chatbot is live on the streamlit dashboard. it is a simple chatbot that can answer questions about uber and lyft 10-k financial documents. it is designed to be a simple demonstration of the potential for a chatbot to provide insights and answer questions about unstructured data.
-
-### Set your OpenAI API KEY
-
-Set your OPENAI_API_KEY environment variable in .env (located at the root level) or
-Run the following command in your terminal, replacing <enter-your-key-here> with your API key.
-
-- on a mac: `echo "export OPENAI_API_KEY=<enter-your-key-here>" >> ~/.zshrc`
-- Update the shell with the new variable: `source ~/.zshrc` (or restart your shell)
-- windows: `setx OPENAI_API_KEY "<enter-your-key-here>" 
-
-Detailed instructions can be found here: https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety
-
-### Running the Application
-
-1. Notebook analysis can be found in the `analysis_sqlite.ipynb` notebook at the root of the project.
-   
-2. Run the Flask API backend and Streamlit dashboard frontend app in your prefered terminal or command prompt, navigate to the root of the project and run the following command to launch everything at once:
-
-   ```sh
-   python3 main.py
+   cd company-data-etl
    ```
 
-alternatively, you can run the backend and frontend separately:
 
-1. Run the Flask application:
-   ```sh
-   python3 run_backend.py
-   ```
+### Running the Application with Docker Compose
+> Note: As mentioned above, ensure Docker and Docker Compose are installed on your system.
 
-2. Run the Streamlit application:
- 
-   ```sh
-   python3 run_frontend.py
-   ```
-
-**note**: the streamlit application is still in development but it is functional and contains basic visualizations and a chatbot. it is designed to serve as a dashboard for the Flask application and beyond. there is still lots of potential here.
-
-
-## Application Structure
-note: the repo has been restructured to better organize the codebase. the following is a brief overview of the new structure:
+To launch the application stack (both the backend Flask API and the Streamlit dashboard frontend), run the following command from the root of the project:
 
 ```sh
+docker-compose up --build
+```
+
+This command builds and starts the containers as defined in the `docker-compose.yaml` file. The Streamlit dashboard will be accessible at `http://localhost:8501`, and the Flask API will be accessible at `http://localhost:8000`.
+
+
+### Stopping the Application
+
+To stop and remove all the containers defined in the `docker-compose.yaml` file, use:
+
+```sh
+docker-compose down
+```
+
+If you want to remove the volumes along with the containers, add the `--volumes` flag:
+
+```sh
+docker-compose down --volumes
+```
+
+## Benefits of Using Docker and Docker Compose
+
+- **Simplicity**: Define your application stack in a YAML file and start your entire stack with a single command.
+- **Environment Consistency**: Docker containers ensure that your application runs the same way in every environment.
+- **Development Efficiency**: Quickly start, stop, and rebuild services. Easily share your application by sharing the Dockerfile and docker-compose.yaml files.
+- **Isolation**: Each service runs in its own container, ensuring that it is isolated from other services.
+
+## Application Structure
+
+The repository has been restructured to better organize the codebase. Below is a brief overview of the new structure:
+
+```plaintext
 .
 ├── README.md
-├── requirements.txt
-├── main.py
+├── docker-compose.yaml
 ├── src
 │   ├── frontend
-│   │   ├── dashboard # contains the streamlit application and the chatbot.
-│   │   ├── API # empty directory for future development and code organization.
-│   │   ├── __init__.py # initializes the streamlit application and sets up routes.
-        |── data # seed pdf for chatbot demo
-        ├── llm # llm chatbot logic: ingestion, tokenization, and response generation.
-        ├── storage # persist indexed datastore 
-
+│   │   ├── dashboard # contains the Streamlit application and the chatbot.
+│   │   ├── data # seed pdf for chatbot demo. TODO: integrate pdf upload/SEC EDGAR API/integration with tabular structured data.
+│   │   ├── llm # WIP: llm chatbot logic: ingestion, tokenization, and response generation.
+│   │   ├── storage # persist indexed datastore. TODO: integrate with vector database. 
 │   ├── backend
 │   │   ├── server.py # imports the Flask application and runs it.
 │   │   ├── app
-│   │   │   ├── 
-│   │   │   ├── api  # Contains the Flask application, database models, and API clients.
 │   │   │   ├── data
 │   │   │   │   ├── FMP-API  # JSON files containing data from our fmpAPIclient.
-│   │   │   │   │   └── FMP-client-output
 │   │   │   │   ├── migrations  # SQL scripts for creating the database schema.
-│   │   │   │   │   ├── phase_1  # a simplified schema used in the initial development and analysis phase.
-│   │   │   │   │   │   └── 
-│   │   │   │   │   └── phase_2  # database schema that adheres to 3rd normal form.
-│   │   │   │   │       └──
-│   │   │   │   ├── seed  #data used for seeding the database.
-│   │   │   │   │   └── SEC-EDGAR 
-│   │   │   │   │       ├── companyfacts 
-│   │   │   ├── clients # Contains classes for making requests to external APIs 
-|   |   |   |           # and retrieving data from external data sources such as the Financial Modeling Prep API and SEC EDGAR.
-│   │   │   ├── utils
-│   │   │   │   ├── adapters  # Contains classes for adapting, transforming, and orchestrating the population of the data retrieved by the clients.
-│   │   │   ├── models  # Contains the ORM model classes that represent the tables in the database and include methods for interacting with the database.
+│   │   │   │   ├── seed  # Data used for seeding the database.
+│   │   │   ├── clients # Contains classes for making requests to external APIs.
+│   │   │   ├── utils # Contains adapter classes to transform incoming data into the format expected by the models.
+│   │   │   ├── models  # Contains the ORM model classes that represent the tables in the database.
 │   │   │   ├── __init__.py  # Initializes the Flask application, sets up routes, and configures the database connection.
-│   │   │   ├── db
-│   │   │       ├── db.py  # DEPRICATED: Contains my old ORM functions for database operations such as connecting to the database, finding records, and building model instances from database records.
+```
 
-## what's next?
-- develop the chatbot to be more robust and capable of answering more complex questions. agentic behavior and more robust RAG architecture.
-- data preprocessing and feature engineering for the financial data. clean data is the foundation of any good model.
-- automate the scraping, api calls, and data ingestion
-- deploy phase 2 schema designed to third normal form
-- setup XML to MD conversion for the chatbot to access company reports and press releases in real time
-- develop a more robust and interactive dashboard with more visualizations and insights
-- refactor the dashboard: pull out functions and classes into separate files and directories
-- there is always more to do. the sky is the limit...
+## Technology Stack
+
+This section outlines the technology stack used in the application. Understanding the stack is crucial for development, maintenance, and scaling purposes.
+
+### Backend
+
+#### Frameworks and Libraries
+- **Flask**: A lightweight WSGI web application framework used to serve the API endpoints.
+- **SQLite (migrating to postgres)**: The database used for storing and querying data. Chosen for its simplicity and ease of integration with Python.
+- **SQLAlchemy**: An ORM (Object-Relational Mapping) tool used to interact with the database using Python code instead of SQL queries.
+
+### Frontend
+
+- **Streamlit**: An open-source app framework used for creating beautiful, custom web apps for machine learning and data science projects. It serves as the dashboard frontend.
+
+
+## What's Next?
+
+- Develop the chatbot to be more robust and capable of answering more complex questions.
+- Data preprocessing and feature engineering for the financial data.
+- Automate the scraping, API calls, and data ingestion.
+- Deploy phase 2 schema designed to third normal form.
+- Setup XML to MD conversion for the chatbot to access company reports and press releases in real-time.
+- Develop a more robust and interactive dashboard with more visualizations and insights.
+- Explore adding more services to application stack, such as a database or a caching service.
+- Integrate Docker and Docker Compose into a CI/CD pipeline for automated testing and deployment.
 
 ## License
 
@@ -140,11 +122,3 @@ This project is licensed under the MIT License - see the `LICENSE.md` file for d
 ## Contact
 
 For any queries or further assistance, please contact the repository owner.
-
-
-
-   docker build -t company-data-etl:dev -f Dockerfile . 
-   docker run -it --entrypoint /bin/bash --env-file=.flaskenv --name company-data-etl-prod company-data-etl:dev
-
-
-
