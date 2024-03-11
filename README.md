@@ -1,4 +1,3 @@
-```markdown:README.md
 # README.md
 
 ## Overview
@@ -14,9 +13,11 @@ Ensure Docker and Docker Compose are installed on your system. For installation 
 ### Installation
 
 1. Clone the repository:
+   
    ```sh
    git clone https://github.com/kyle-cassidy/company-data-etl
    ```
+
 2. Navigate to the project directory:
    ```sh
    cd company-data-etl
@@ -28,9 +29,9 @@ Ensure Docker and Docker Compose are installed on your system. For installation 
 
 To launch the application stack (both the backend Flask API and the Streamlit dashboard frontend), run the following command from the root of the project:
 
-```sh
-docker-compose up --build
-```
+   ```sh
+   docker-compose up --build
+   ```
 
 This command builds and starts the containers as defined in the `docker-compose.yaml` file. The Streamlit dashboard will be accessible at `http://localhost:8501`, and the Flask API will be accessible at `http://localhost:8000`.
 
@@ -39,15 +40,15 @@ This command builds and starts the containers as defined in the `docker-compose.
 
 To stop and remove all the containers defined in the `docker-compose.yaml` file, use:
 
-```sh
-docker-compose down
-```
+   ```sh
+   docker-compose down
+   ```
 
 If you want to remove the volumes along with the containers, add the `--volumes` flag:
 
-```sh
-docker-compose down --volumes
-```
+   ```sh
+   docker-compose down --volumes
+   ```
 
 ## Benefits of Using Docker and Docker Compose
 
